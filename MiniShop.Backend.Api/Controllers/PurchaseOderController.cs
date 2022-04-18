@@ -72,13 +72,12 @@ namespace MiniShop.Backend.Api.Controllers
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
         [Parameters(name = "shopId", param = "商店ID")]
-        [Parameters(name = "code", param = "采购订单编码")]
-        [Parameters(name = "name", param = "采购订单名称")]
-        [HttpGet("GetPageOnShopWhereQueryCodeOrName")]
-        public async Task<IResultModel> GetPageOnShopWhereQueryCodeOrName([Required] int pageIndex, int pageSize, Guid shopId, int storeId, string oderNo)
+        [Parameters(name = "oderNo", param = "采购订单编码")]
+        [HttpGet("GetPageOnShopWhereQuery")]
+        public async Task<IResultModel> GetPageOnShopWhereQuery([Required] int pageIndex, int pageSize, Guid shopId, string oderNo)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：门店ID {storeId} 采购订单编码 {oderNo} 获取采购订单");
-            return await _purchaseOderService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, storeId, oderNo);
+            _logger.LogDebug($"根据商店ID：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：采购订单编码 {oderNo} 获取采购订单");
+            return await _purchaseOderService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, oderNo);
         }
 
         [Description("通过指定采购订单ID删除采购订单")]
