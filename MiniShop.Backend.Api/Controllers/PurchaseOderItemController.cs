@@ -66,6 +66,20 @@ namespace MiniShop.Backend.Api.Controllers
             return await _purchaseOderItemService.Value.GetPageByShopIdAsync(pageIndex, pageSize, shopId);
         }
 
+        [Description("根据商店ID、订单号获取采购订单商品列表")]
+        [OperationId("根据商店ID、订单号获取采购订单商品列表")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "pageIndex", param = "索引页")]
+        [Parameters(name = "pageSize", param = "单页条数")]
+        [Parameters(name = "shopId", param = "商店ID")]
+        [Parameters(name = "oderNo", param = "采购订单编码")]
+        [HttpGet("GetPageByShopIdOderNoAsync")]
+        public async Task<IResultModel> GetPageByShopIdOderNoAsync([Required] int pageIndex, int pageSize,  Guid shopId, string oderNo)
+        {
+            _logger.LogDebug($"根据商店ID：{shopId} 采购订单编码：{oderNo} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取采购订单商品列表");
+            return await _purchaseOderItemService.Value.GetPageByShopIdOderNoAsync(pageIndex, pageSize, shopId, oderNo);
+        }
+
         [Description("通过指定采购订单ID删除采购订单商品")]
         [OperationId("通过指定采购订单ID删除采购订单商品")]
         [Parameters(name = "id", param = "采购订单商品ID")]

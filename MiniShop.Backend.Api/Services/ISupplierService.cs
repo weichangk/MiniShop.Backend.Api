@@ -12,6 +12,8 @@ namespace MiniShop.Backend.Api.Services
 
         Task<IResultModel> GetMaxCodeByShopIdAsync(Guid shopId);
 
+        Task<IResultModel> GetByShopIdAsync(Guid shopId);
+        
         Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId);
 
         Task<IResultModel> GetPageByShopIdWhereQueryAsync(int pageIndex, int pageSize, Guid shopId, string code, string name);

@@ -36,6 +36,13 @@ namespace MiniShop.Backend.Api.Services
             return ResultModel.Success(list);
         }
 
+        public async Task<IResultModel> GetPageByShopIdOderNoAsync(int pageIndex, int pageSize, Guid shopId, string oderNo)
+        {
+            var data = _repository.Value.TableNoTracking;
+            data = data.Where(s => s.ShopId == shopId && s.OderNo == oderNo);
+            var list = await data.ProjectTo<PurchaseOderItemDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
+            return ResultModel.Success(list);
+        }
     }
 
     public class CreatePurchaseOderItemService : BaseService<PurchaseOderItem, PurchaseOderItemCreateDto, int>, ICreatePurchaseOderItemService, IDependency

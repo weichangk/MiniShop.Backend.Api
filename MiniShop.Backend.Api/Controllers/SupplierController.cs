@@ -54,6 +54,17 @@ namespace MiniShop.Backend.Api.Controllers
             return await _supplierService.Value.GetByCodeOnShopAsync(shopId, code);
         }
 
+        [Description("根据ShopId查询供应商")]
+        [OperationId("查询供应商")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "shopId", param = "ShopId")]
+        [HttpGet("GetByShopId")]
+        public async Task<IResultModel> GetByShopId([Required] Guid shopId)
+        {
+            _logger.LogDebug($"根据ShopId：{shopId} 查询供应商");
+            return await _supplierService.Value.GetByShopIdAsync(shopId);
+        }
+
         [Description("根据商店ID查询最大供应商编码")]
         [OperationId("根据商店ID查询最大供应商编码")]
         [ResponseCache(Duration = 0)]
