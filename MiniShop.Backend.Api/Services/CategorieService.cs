@@ -31,7 +31,7 @@ namespace MiniShop.Backend.Api.Services
         {
             var data = _repository.Value.TableNoTracking.Where(s => s.ShopId == shopId && s.Level == level);
             var list = await data.ToListAsync();
-            var maxCode = list == null || list.Count == 0 ? 0 : list.Max(s => s.Code) + 1;
+            var maxCode = list == null || list.Count == 0 ? 0 : list.Max(s => s.Code);
             return ResultModel.Success(maxCode);
         }
 
