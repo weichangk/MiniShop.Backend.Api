@@ -8,7 +8,7 @@ namespace MiniShop.Backend.Api.Services
 {
     public interface ISupplierService : IBaseService<Supplier, SupplierDto, int>
     {
-        Task<IResultModel> GetByCodeOnShopAsync(Guid shopId, int code);
+        Task<IResultModel> GetByShopIdCodeAsync(Guid shopId, int code);
 
         Task<IResultModel> GetMaxCodeByShopIdAsync(Guid shopId);
 

@@ -20,7 +20,7 @@ namespace MiniShop.Backend.Api.Services
 
         }
 
-        public async Task<IResultModel> GetByCodeOnShopAsync(Guid shopId, string code)
+        public async Task<IResultModel> GetByShopIdCodeAsync(Guid shopId, string code)
         {
             var data = _repository.Value.TableNoTracking.Where(s => s.ShopId == shopId && s.Code == code);
             var dto = await data.ProjectTo<ItemDto>(_mapper.Value.ConfigurationProvider).FirstOrDefaultAsync();

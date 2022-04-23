@@ -38,11 +38,10 @@ namespace MiniShop.Backend.Api.Controllers
         }
 
         [Description("根据用户名获取用户")]
-        [OperationId("根据用户名获取用户")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "name", param = "用户名")]
-        [HttpGet]
-        public async Task<IResultModel> GetByName([Required] string name)
+        [HttpGet("GetByNameAsync")]
+        public async Task<IResultModel> GetByNameAsync([Required] string name)
         {
             _logger.LogDebug($"根据用户名：{name} 获取用户");
             var data = await _userManager.Value.FindByNameAsync(name);
@@ -55,17 +54,16 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success(userDto);
         }
 
-        [Description("根据商店ID、分页条件、请求者职位等级获取商店用户分页列表")]
-        [OperationId("根据商店ID、分页条件、请求者职位等级获取商店用户分页列表")]
+        [Description("根据 shopId、请求者职位等级获取用户分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
+        [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "rank", param = "请求者职位等级")]
-        [HttpGet("GetPageByRankOnShop")]
-        public async Task<IResultModel> GetPageByRankOnShop([Required] int pageIndex, int pageSize, Guid shopId, EnumRole rank)
+        [HttpGet("GetPageByShopIdRankAsync")]
+        public async Task<IResultModel> GetPageByShopIdRankAsync([Required] int pageIndex, int pageSize, Guid shopId, EnumRole rank)
         {
-            _logger.LogDebug($"根据商店ID：{shopId}  职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取商店的用户分页列表");
+            _logger.LogDebug($"根据 shopId：{shopId}  请求者职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取用户分页列表");
             var data = await _userManager.Value.GetUsersForClaimAsync(new Claim("shopid", shopId.ToString()));
             data = await IdentityUsersFilterByRank(data, rank);
             var userPagedList = data.AsQueryable().ProjectTo<UserDto>(_mapper.Value.ConfigurationProvider).ToPagedList(pageIndex, pageSize);
@@ -76,18 +74,17 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success(userPagedList);
         }
 
-        [Description("根据商店ID、门店ID、分页条件、请求者职位等级获取门店用户分页列表")]
-        [OperationId("根据商店ID、门店ID、分页条件、请求者职位等级获取门店用户分页列表")]
+        [Description("根据 storeId、storeId、请求者职位等级获取用户分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
-        [Parameters(name = "storeId", param = "门店ID")]
+        [Parameters(name = "shopId", param = "shopId")]
+        [Parameters(name = "storeId", param = "storeId")]
         [Parameters(name = "rank", param = "请求者职位等级")]
-        [HttpGet("GetPageByRankOnStore")]
-        public async Task<IResultModel> GetPageByRankOnStore([Required] int pageIndex, int pageSize, Guid shopId, Guid storeId, EnumRole rank)
+        [HttpGet("GetPageByShopIdStoreIdRankAsync")]
+        public async Task<IResultModel> GetPageByShopIdStoreIdRankAsync([Required] int pageIndex, int pageSize, Guid shopId, Guid storeId, EnumRole rank)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 门店ID：{storeId} 职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取门店的用户分页列表");
+            _logger.LogDebug($"根据 shopId：{shopId} storeId：{storeId} 请求者职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取门店的分页列表");
             var dataByShopId = await _userManager.Value.GetUsersForClaimAsync(new Claim("shopid", shopId.ToString()));
             var dataByStoreId = await _userManager.Value.GetUsersForClaimAsync(new Claim("storeid", storeId.ToString()));
             var data = dataByShopId.Intersect(dataByStoreId).ToList();
@@ -100,20 +97,19 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success(userPagedList);
         }
 
-        [Description("根据商店ID、分页条件、请求者职位等级，和职位、用户名、手机号模糊查询条件获取商店用户分页列表")]
-        [OperationId("根据商店ID、分页条件、请求者职位等级，和职位、用户名、手机号模糊查询条件获取商店用户分页列表")]
+        [Description("根据 shopId、请求者职位等级，附加查询条件获取用户分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
+        [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "rank", param = "请求者职位等级")]
         [Parameters(name = "queryRank", param = "职位查询")]
         [Parameters(name = "queryName", param = "用户名查询")]
         [Parameters(name = "queryPhone", param = "手机号查询")]
-        [HttpGet("GetPageByRankOnShopWhereQueryRankOrNameOrPhone")]
-        public async Task<IResultModel> GetPageByRankOnShopWhereQueryRankOrNameOrPhone([Required] int pageIndex, int pageSize, Guid shopId, EnumRole rank, EnumRole? queryRank, string queryName, string queryPhone)
+        [HttpGet("GetPageByShopIdStoreIdRankWhereQueryAsync")]
+        public async Task<IResultModel> GetPageByShopIdStoreIdRankWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, EnumRole rank, EnumRole? queryRank, string queryName, string queryPhone)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 模糊查询条件： 职位：{queryRank} 用户名：{queryName} 手机号：{queryPhone} 获取商店的用户分页列表");
+            _logger.LogDebug($"根据 shopId：{shopId} 请求者职位等级{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 附加查询条件： 职位：{queryRank} 用户名：{queryName} 手机号：{queryPhone} 获取用户分页列表");
             var data = await _userManager.Value.GetUsersForClaimAsync(new Claim("shopid", shopId.ToString()));
             data = await IdentityUsersFilterByRank(data, rank);
 
@@ -142,21 +138,20 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success(userPagedList);
         }
 
-        [Description("根据商店ID、分页条件、请求者职位等级，和门店、职位、用户名、手机号模糊查询条件获取商店用户分页列表")]
-        [OperationId("根据商店ID、分页条件、请求者职位等级，和门店、职位、用户名、手机号模糊查询条件获取商店用户分页列表")]
+        [Description("根据 shopId、请求者职位等级，附加查询条件（包含storeId）获取用户分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
         [Parameters(name = "shopId", param = "商店ID")]
         [Parameters(name = "rank", param = "请求者职位等级")]
-        [Parameters(name = "queryStore", param = "职位门店")]
+        [Parameters(name = "queryStore", param = "storeId")]
         [Parameters(name = "queryRank", param = "职位查询")]
         [Parameters(name = "queryName", param = "用户名查询")]
         [Parameters(name = "queryPhone", param = "手机号查询")]
-        [HttpGet("GetPageByRankOnShopWhereQueryStoreOrRankOrNameOrPhone")]
-        public async Task<IResultModel> GetPageByRankOnShopWhereQueryStoreOrRankOrNameOrPhone([Required] int pageIndex, int pageSize, Guid shopId, EnumRole rank, Guid? queryStore, EnumRole? queryRank, string queryName, string queryPhone)
+        [HttpGet("GetPageByShopIdStoreIdRankWhereQueryWithStoreIdAsync")]
+        public async Task<IResultModel> GetPageByShopIdStoreIdRankWhereQueryWithStoreIdAsync([Required] int pageIndex, int pageSize, Guid shopId, EnumRole rank, Guid? queryStore, EnumRole? queryRank, string queryName, string queryPhone)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 模糊查询条件： 门店：{queryStore} 职位：{queryRank} 用户名：{queryName} 手机号：{queryPhone} 获取商店的用户分页列表");
+            _logger.LogDebug($"根据商店ID：{shopId} 职位等级：{rank} 分页条件：索引页{pageIndex} 单页条数{pageSize} 模糊查询条件： storeId：{queryStore} 职位：{queryRank} 用户名：{queryName} 手机号：{queryPhone} 获取商店的用户分页列表");
             var data = await _userManager.Value.GetUsersForClaimAsync(new Claim("shopid", shopId.ToString()));
             data = await IdentityUsersFilterByRank(data, rank);
 
@@ -191,11 +186,10 @@ namespace MiniShop.Backend.Api.Controllers
         }
 
         [Description("根据请求者职位等级、用户名删除用户")]
-        [OperationId("根据请求者职位等级、用户名删除用户")]
         [Parameters(name = "rank", param = "请求者职位等级")]
         [Parameters(name = "name", param = "用户名")]
-        [HttpDelete]
-        public async Task<IResultModel> DeleteByName([Required] EnumRole rank, string name)
+        [HttpDelete("DeleteByRankNameAsync")]
+        public async Task<IResultModel> DeleteByRankNameAsync([Required] EnumRole rank, string name)
         {
             _logger.LogDebug("删除用户");
             var user = await _userManager.Value.FindByNameAsync(name);
@@ -223,11 +217,10 @@ namespace MiniShop.Backend.Api.Controllers
         }
 
         [Description("根据请求者职位等级、用户名列表批量删除用户")]
-        [OperationId("根据请求者职位等级、用户名列表批量删除用户")]
         [Parameters(name = "rank", param = "请求者职位等级")]
         [Parameters(name = "names", param = "用户名列表")]
-        [HttpDelete("BatchDelete")]
-        public async Task<IResultModel> BatchDeleteByNames([Required] EnumRole rank, [FromBody] List<string> names)
+        [HttpDelete("BatchDeleteByRankNamesAsync")]
+        public async Task<IResultModel> BatchDeleteByRankNamesAsync([Required] EnumRole rank, [FromBody] List<string> names)
         {
             _logger.LogDebug("批量删除用户");
             List<IdentityUser> users = new List<IdentityUser>();
@@ -258,14 +251,12 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success();
         }
 
-        [Description("根据请求者职位等级新增用户，成功返回用户信息")]
-        [OperationId("根据请求者职位等级新增用户")]
+        [Description("根据请求者职位等级新增用户")]
         [Parameters(name = "rank", param = "请求者职位等级")]
-        [HttpPost]
-        public async Task<IResultModel> Add([Required] EnumRole rank, [FromBody] UserCreateDto model)
+        [HttpPost("InsertByRankAsync")]
+        public async Task<IResultModel> InsertByRankAsync([Required] EnumRole rank, [FromBody] UserCreateDto model)
         {
             _logger.LogDebug("新增用户");
-
             var user = await _userManager.Value.FindByNameAsync(model.UserName);
             if (user != null)
             {
@@ -312,11 +303,10 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success(userDto);
         }
 
-        [Description("根据请求者职位等级Put修改用户，成功返回用户信息")]
-        [OperationId("根据请求者职位等级Put修改用户")]
+        [Description("根据请求者职位等级 Put 修改用户")]
         [Parameters(name = "rank", param = "请求者职位等级")]
-        [HttpPut]
-        public async Task<IResultModel> PutUpdate([Required] EnumRole rank, [FromBody] UserUpdateDto model)
+        [HttpPut("UpdateByRankAsync")]
+        public async Task<IResultModel> UpdateByRankAsync([Required] EnumRole rank, [FromBody] UserUpdateDto model)
         {
             _logger.LogDebug("Put修改用户");
 
@@ -371,12 +361,11 @@ namespace MiniShop.Backend.Api.Controllers
             return ResultModel.Success(userDto);
         }
 
-        [Description("根据请求者职位等级Patch修改用户，成功返回用户信息")]
-        [OperationId("根据请求者职位等级Patch修改用户")]
+        [Description("根据请求者职位等级 Patch 修改用户")]
         [Parameters(name = "rank", param = "请求者职位等级")]
         [Parameters(name = "name", param = "用户名")]
-        [HttpPatch]
-        public async Task<IResultModel> PatchUpdateByName([Required] EnumRole rank, string name, [FromBody] JsonPatchDocument<UserUpdateDto> doc)
+        [HttpPatch("PatchUpdateByRankNameAsync")]
+        public async Task<IResultModel> PatchUpdateByRankNameAsync([Required] EnumRole rank, string name, [FromBody] JsonPatchDocument<UserUpdateDto> doc)
         {
             _logger.LogDebug("Patch修改用户");
 

@@ -20,14 +20,14 @@ namespace MiniShop.Backend.Api.Services
 
         }
 
-        public async Task<IResultModel> GetByCodeOnShopAsync(Guid shopId, int code)
+        public async Task<IResultModel> GetByShopIdCodeAsync(Guid shopId, int code)
         {
             var data = _repository.Value.TableNoTracking.Where(s => s.ShopId == shopId && s.Code == code);
             var categorieDto = await data.ProjectTo<CategorieDto>(_mapper.Value.ConfigurationProvider).FirstOrDefaultAsync();
             return ResultModel.Success(categorieDto);
         }
 
-        public async Task<IResultModel> GetMaxCodeByLevelOnShop(Guid shopId, int level)
+        public async Task<IResultModel> GetMaxCodeByShopIdLevelAsync(Guid shopId, int level)
         {
             var data = _repository.Value.TableNoTracking.Where(s => s.ShopId == shopId && s.Level == level);
             var list = await data.ToListAsync();

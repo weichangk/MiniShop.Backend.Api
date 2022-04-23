@@ -14,9 +14,6 @@ using System.Threading.Tasks;
 
 namespace MiniShop.Backend.Api.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -30,20 +27,12 @@ namespace MiniShop.Backend.Api.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="logger"></param>
         public WeatherForecastController(ILogger<WeatherForecastController> logger, Lazy<IShopService> shopService)
         {
             _logger = logger;
             _shopService = shopService;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

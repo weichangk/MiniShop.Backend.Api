@@ -31,63 +31,58 @@ namespace MiniShop.Backend.Api.Controllers
             _updateItemService = updateItemService;
         }
 
-        [Description("根据商品ID查询商品")]
-        [OperationId("根据商品ID查询商品")]
+        [Description("根据 ID 获取商品")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "id", param = "商品ID")]
-        [HttpGet]
-        public async Task<IResultModel> GetById([Required] int id)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IResultModel> GetByIdAsync([Required] int id)
         {
-            _logger.LogDebug($"根据商品ID：{id} 查询商品");
+            _logger.LogDebug($"根据商品 ID：{id} 获取商品");
             return await _itemService.Value.GetByIdAsync(id);
         }
 
-        [Description("根据商品编码查询商品")]
-        [OperationId("根据商品编码查询商品")]
+        [Description("根据 shopId、商品编码获取商品")]
         [ResponseCache(Duration = 0)]
-        [Parameters(name = "shopId", param = "商店ID")]
+        [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "code", param = "商品编码")]
-        [HttpGet("GetByCodeOnShop")]
-        public async Task<IResultModel> GetByCodeOnShop([Required] Guid shopId, string code)
+        [HttpGet("GetByShopIdCodeAsync")]
+        public async Task<IResultModel> GetByShopIdCodeAsync([Required] Guid shopId, string code)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 商品编码：{code} 查询商品");
-            return await _itemService.Value.GetByCodeOnShopAsync(shopId, code);
+            _logger.LogDebug($"根据 shopId：{shopId} 商品编码：{code} 获取商品");
+            return await _itemService.Value.GetByShopIdCodeAsync(shopId, code);
         }
 
-        [Description("根据分页条件获取商品")]
-        [OperationId("获取商品分页列表")]
+        [Description("根据 shopId 获取商品分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
-        [HttpGet("GetPageOnShop")]
-        public async Task<IResultModel> GetPageOnShop([Required] int pageIndex, int pageSize, Guid shopId)
+        [Parameters(name = "shopId", param = "shopId")]
+        [HttpGet("GetPageByShopIdAsync")]
+        public async Task<IResultModel> GetPageByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取商品");
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取商品分页列表");
             return await _itemService.Value.GetPageByShopIdAsync(pageIndex, pageSize, shopId);
         }
 
-        [Description("根据商店ID、分页条件、查询条件获取商品")]
-        [OperationId("按条件获取商品分页列表")]
+        [Description("根据 shopId 附加查询条件获取商品分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
+        [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "code", param = "商品编码")]
         [Parameters(name = "name", param = "商品名称")]
-        [HttpGet("GetPageOnShopWhereQuery")]
-        public async Task<IResultModel> GetPageOnShopWhereQuery([Required] int pageIndex, int pageSize, Guid shopId, string code, string name)
+        [HttpGet("GetPageByShopIdWhereQueryAsync")]
+        public async Task<IResultModel> GetPageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, string code, string name)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：商品编码 {code} 商品名称 {name} 获取商品");
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：商品编码 {code} 商品名称 {name} 获取商品分页列表");
             return await _itemService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, code, name);
         }
 
-        [Description("通过指定商品ID删除商品")]
-        [OperationId("删除商品")]
-        [Parameters(name = "id", param = "商品ID")]
-        [HttpDelete]
+        [Description("根据 ID 删除商品")]
+        [Parameters(name = "id", param = "商品 ID")]
+        [HttpDelete("DeleteAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> Delete([Required] int id)
+        public async Task<IResultModel> DeleteAsync([Required] int id)
         {
             _logger.LogDebug("删除商品");
             var delData = (ResultModel<ItemDto>)(await _itemService.Value.GetByIdAsync(id));
@@ -106,12 +101,11 @@ namespace MiniShop.Backend.Api.Controllers
             return await _itemService.Value.RemoveAsync(id);
         }
 
-        [Description("通过指定商品ID集合批量删除商品")]
-        [OperationId("批量删除商品")]
-        [Parameters(name = "ids", param = "商品ID集合")]
-        [HttpDelete("BatchDelete")]
+        [Description("根据 ID 集合批量删除商品")]
+        [Parameters(name = "ids", param = "商品 ID 集合")]
+        [HttpDelete("BatchDeleteAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> BatchDelete([FromBody] List<int> ids)
+        public async Task<IResultModel> BatchDeleteAsync([FromBody] List<int> ids)
         {
             _logger.LogDebug("批量删除商品");
             foreach (var id in ids)
@@ -133,31 +127,28 @@ namespace MiniShop.Backend.Api.Controllers
             return await _itemService.Value.RemoveAsync(ids);
         }
 
-        [Description("添加商品，成功后返回当前商品信息")]
-        [OperationId("添加商品")]
-        [HttpPost]
+        [Description("添加商品")]
+        [HttpPost("InsertAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> Add([FromBody] ItemCreateDto model)
+        public async Task<IResultModel> InsertAsync([FromBody] ItemCreateDto model)
         {
             _logger.LogDebug("添加商品");
             return await _createItemService.Value.InsertAsync(model);
         }
 
-        [Description("Put修改商品，成功返回商品信息")]
-        [OperationId("修改商品")]
-        [HttpPut]
+        [Description("Put 修改商品")]
+        [HttpPut("UpdateAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> Update([FromBody] ItemUpdateDto model)
+        public async Task<IResultModel> UpdateAsync([FromBody] ItemUpdateDto model)
         {
             _logger.LogDebug("修改商品");
             return await _updateItemService.Value.UpdateAsync(model);
         }
 
-        [Description("Patch使用修改商品，成功返回商品信息")]
-        [OperationId("修改商品")]
-        [HttpPatch]
+        [Description("Patch 修改商品")]
+        [HttpPatch("PatchAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> PatchUpdate([FromRoute] int id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDocument)
+        public async Task<IResultModel> PatchAsync([FromRoute] int id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDocument)
         {
             _logger.LogDebug("使用JsonPatch修改商品");
             return await _updateItemService.Value.PatchAsync(id, patchDocument);

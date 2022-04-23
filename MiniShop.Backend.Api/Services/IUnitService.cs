@@ -8,9 +8,9 @@ namespace MiniShop.Backend.Api.Services
 {
     public interface IUnitService : IBaseService<Unit, UnitDto, int>
     {
-        Task<IResultModel> GetByCodeOnShopAsync(Guid shopId, int code);
+        Task<IResultModel> GetByShopIdCodeAsync(Guid shopId, int code);
 
-        Task<IResultModel> GetMaxCodeByShopId(Guid shopId);
+        Task<IResultModel> GetMaxCodeByShopIdAsync(Guid shopId);
 
         Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId);
 
