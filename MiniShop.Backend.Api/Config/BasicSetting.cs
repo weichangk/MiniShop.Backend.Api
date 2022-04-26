@@ -1,4 +1,5 @@
-﻿using Weick.Orm.Core;
+﻿using System.Security.AccessControl;
+using Weick.Orm.Core;
 
 namespace MiniShop.Backend.Api.Config
 {
@@ -39,6 +40,14 @@ namespace MiniShop.Backend.Api.Config
         public string AuthenticationMiniShopBackendApiName { get; set; }
 
         public string AuthenticationMiniShopBackendApiSecret { get; set; }
+
+        #region cos
+        public string CosAppId { get; set; }
+        public string CosRegion { get; set; }
+        public string CosItemImgBuketName { get; set; }    
+        public string CosSecretId { get; set; }    
+        public string CosSecretKey { get; set; }    
+        #endregion
 
         public static BasicSetting Setting { get; set; } = new BasicSetting();
     }

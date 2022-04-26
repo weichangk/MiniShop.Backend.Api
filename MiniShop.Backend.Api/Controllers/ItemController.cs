@@ -12,6 +12,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
+using Weick.CommonTools.Code.Helper;
+using MiniShop.Backend.Api.Config;
 
 namespace MiniShop.Backend.Api.Controllers
 {
@@ -29,6 +31,32 @@ namespace MiniShop.Backend.Api.Controllers
             _itemService = itemService;
             _createItemService = createItemService;
             _updateItemService = updateItemService;
+        }
+
+        [Description("上传商品图片")]
+        [Parameters(name = "key", param = "图片 key")]
+        [Parameters(name = "base64", param = "图片链接 base64")]
+        [HttpPost("UploadImgAsync")]
+        public async Task<IResultModel> UploadImgAsync([Required] string key, [FromBody] string base64)
+        {
+            _logger.LogDebug($"上传商品图片 key：{key} base64：{base64}");
+            // 构建一个 CoxXmlServer 对象
+            var cosClient = new CosBuilder()
+                .SetAccount(BasicSetting.Setting.CosAppId, BasicSetting.Setting.CosRegion)
+                .SetCosXmlServer()
+                .SetSecret(BasicSetting.Setting.CosSecretId, BasicSetting.Setting.CosSecretKey)
+                .Builder();
+
+            var bucketClient = new BucketClient(cosClient, BasicSetting.Setting.CosItemImgBuketName, BasicSetting.Setting.CosAppId);
+            var res = await bucketClient.UpFile(key, base64);
+            if(res.Code == 200)
+            {
+                return ResultModel.Success(res.Data);
+            }
+            else
+            {
+                return ResultModel.Failed(res.Message, res.Code);
+            }
         }
 
         [Description("根据 ID 获取商品")]
