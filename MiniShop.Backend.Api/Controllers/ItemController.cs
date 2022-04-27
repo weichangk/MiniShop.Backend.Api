@@ -33,14 +33,13 @@ namespace MiniShop.Backend.Api.Controllers
             _updateItemService = updateItemService;
         }
 
-        [Description("上传商品图片")]
+        [Description("上传对象存储商品图片")]
         [Parameters(name = "key", param = "图片 key")]
         [Parameters(name = "base64", param = "图片链接 base64")]
         [HttpPost("UploadImgAsync")]
         public async Task<IResultModel> UploadImgAsync([Required] string key, [FromBody] string base64)
         {
             _logger.LogDebug($"上传商品图片 key：{key} base64：{base64}");
-            // 构建一个 CoxXmlServer 对象
             var cosClient = new CosBuilder()
                 .SetAccount(BasicSetting.Setting.CosAppId, BasicSetting.Setting.CosRegion)
                 .SetCosXmlServer()
@@ -49,6 +48,54 @@ namespace MiniShop.Backend.Api.Controllers
 
             var bucketClient = new BucketClient(cosClient, BasicSetting.Setting.CosItemImgBuketName, BasicSetting.Setting.CosAppId);
             var res = await bucketClient.UpFile(key, base64);
+            if(res.Code == 200)
+            {
+                return ResultModel.Success(res.Data);
+            }
+            else
+            {
+                return ResultModel.Failed(res.Message, res.Code);
+            }
+        }
+
+        [Description("删除对象存储商品图片")]
+        [Parameters(name = "key", param = "图片 key")]
+        [HttpPost("DeleteImgAsync")]
+        public async Task<IResultModel> DeleteImgAsync([Required] string key)
+        {
+            _logger.LogDebug($"删除商品图片 key：{key}");
+            var cosClient = new CosBuilder()
+                .SetAccount(BasicSetting.Setting.CosAppId, BasicSetting.Setting.CosRegion)
+                .SetCosXmlServer()
+                .SetSecret(BasicSetting.Setting.CosSecretId, BasicSetting.Setting.CosSecretKey)
+                .Builder();
+
+            var bucketClient = new BucketClient(cosClient, BasicSetting.Setting.CosItemImgBuketName, BasicSetting.Setting.CosAppId);
+            var res = await bucketClient.DeleteObject(key);
+            if(res.Code == 200)
+            {
+                return ResultModel.Success(res.Data);
+            }
+            else
+            {
+                return ResultModel.Failed(res.Message, res.Code);
+            }
+        }
+
+        [Description("批量删除对象存储商品图片")]
+        [Parameters(name = "keys", param = "图片 key 集合")]
+        [HttpPost("BatchDeleteImgAsync")]
+        public async Task<IResultModel> BatchDeleteImgAsync([FromBody] List<string> keys)
+        {
+            _logger.LogDebug($"批量删除商品图片");
+            var cosClient = new CosBuilder()
+                .SetAccount(BasicSetting.Setting.CosAppId, BasicSetting.Setting.CosRegion)
+                .SetCosXmlServer()
+                .SetSecret(BasicSetting.Setting.CosSecretId, BasicSetting.Setting.CosSecretKey)
+                .Builder();
+
+            var bucketClient = new BucketClient(cosClient, BasicSetting.Setting.CosItemImgBuketName, BasicSetting.Setting.CosAppId);
+            var res = await bucketClient.BatchDeleteObject(keys);
             if(res.Code == 200)
             {
                 return ResultModel.Success(res.Data);
