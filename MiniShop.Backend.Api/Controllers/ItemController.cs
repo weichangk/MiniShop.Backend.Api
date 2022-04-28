@@ -160,19 +160,6 @@ namespace MiniShop.Backend.Api.Controllers
         public async Task<IResultModel> DeleteAsync([Required] int id)
         {
             _logger.LogDebug("删除商品");
-            var delData = (ResultModel<ItemDto>)(await _itemService.Value.GetByIdAsync(id));
-            if (delData == null || delData.Data == null)
-            {
-                _logger.LogError($"商品删除错误：{id} 不存在");
-                return ResultModel.Failed($"商品删除错误：{id} 不存在", (int)HttpStatusCode.NotFound);
-            }
-            else
-            {
-                if (delData.Data.Code == "0000000000000")
-                {
-                    return ResultModel.Failed("不能删除系统默认商品", (int)HttpStatusCode.Forbidden);
-                }
-            }
             return await _itemService.Value.RemoveAsync(id);
         }
 
@@ -183,22 +170,6 @@ namespace MiniShop.Backend.Api.Controllers
         public async Task<IResultModel> BatchDeleteAsync([FromBody] List<int> ids)
         {
             _logger.LogDebug("批量删除商品");
-            foreach (var id in ids)
-            {
-                var delData = (ResultModel<ItemDto>)(await _itemService.Value.GetByIdAsync(id));
-                if (delData == null || delData.Data == null)
-                {
-                    _logger.LogError($"商品删除错误：{id} 不存在");
-                    return ResultModel.Failed($"商品删除错误：{id} 不存在", (int)HttpStatusCode.NotFound);
-                }
-                else
-                {
-                    if (delData.Data.Code == "0000000000000")
-                    {
-                        return ResultModel.Failed("不能删除系统默认商品", (int)HttpStatusCode.Forbidden);
-                    }
-                }
-            }
             return await _itemService.Value.RemoveAsync(ids);
         }
 

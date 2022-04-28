@@ -8,11 +8,9 @@ namespace MiniShop.Backend.Api.Services
 {
     public interface IPurchaseOderItemService : IBaseService<PurchaseOderItem, PurchaseOderItemDto, int>
     {
-        Task<IResultModel> GetByIdOnShopAsync(Guid shopId, int id);
-
         Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId);
 
-        Task<IResultModel> GetPageByShopIdOderNoAsync(int pageIndex, int pageSize, Guid shopId, string oderNo);
+        Task<IResultModel> GetPageByShopIdPurchaseOderIdAsync(int pageIndex, int pageSize, Guid shopId, int purchaseOderId);
 
     }
 

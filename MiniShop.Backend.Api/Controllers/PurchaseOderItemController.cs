@@ -30,103 +30,83 @@ namespace MiniShop.Backend.Api.Controllers
             _updatePurchaseOderItemService = updatePurchaseOderItemService;
         }
 
-        [Description("根据ID查询采购订单商品")]
-        [OperationId("根据ID查询采购订单商品")]
+        [Description("根据 ID 获取采购订单商品")]
         [ResponseCache(Duration = 0)]
-        [Parameters(name = "id", param = "采购订单商品ID")]
-        [HttpGet]
-        public async Task<IResultModel> GetById([Required] int id)
+        [Parameters(name = "id", param = "采购订单商品 ID")]
+        [HttpGet("GetByIdAsync")]
+        public async Task<IResultModel> GetByIdAsync([Required] int id)
         {
-            _logger.LogDebug($"根据采购订单商品ID：{id} 采购订单商品");
+            _logger.LogDebug($"根据采购订单商品ID：{id} 获取采购订单商品");
             return await _purchaseOderItemService.Value.GetByIdAsync(id);
         }
 
-        [Description("根据商店ID和采购订单商品ID查询采购订单商品")]
-        [OperationId("根据商店ID和采购订单商品ID查询采购订单商品")]
-        [ResponseCache(Duration = 0)]
-        [Parameters(name = "shopId", param = "商店ID")]
-        [Parameters(name = "id", param = "采购订单商品ID")]
-        [HttpGet("GetByIdOnShop")]
-        public async Task<IResultModel> GetByIdOnShop([Required] Guid shopId, int id)
-        {
-            _logger.LogDebug($"根据商店ID：{shopId} 采购订单商品ID：{id} 查询采购订单商品");
-            return await _purchaseOderItemService.Value.GetByIdOnShopAsync(shopId, id);
-        }
-
-        [Description("根据分页条件获取采购订单商品")]
-        [OperationId("根据分页条件获取采购订单商品")]
+        [Description("根据 shopId、采购订单商品ID 获取采购订单商品分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
-        [HttpGet("GetPageOnShop")]
-        public async Task<IResultModel> GetPageOnShop([Required] int pageIndex, int pageSize, Guid shopId)
+        [Parameters(name = "shopId", param = "shopId")]
+        [HttpGet("GetPageByShopIdAsync")]
+        public async Task<IResultModel> GetPageByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取采购订单商品");
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取采购订单商品分页列表");
             return await _purchaseOderItemService.Value.GetPageByShopIdAsync(pageIndex, pageSize, shopId);
         }
 
-        [Description("根据商店ID、订单号获取采购订单商品列表")]
-        [OperationId("根据商店ID、订单号获取采购订单商品列表")]
+        [Description("根据商店 ID、采购订单 ID 获取采购订单商品列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
-        [Parameters(name = "shopId", param = "商店ID")]
-        [Parameters(name = "oderNo", param = "采购订单编码")]
-        [HttpGet("GetPageByShopIdOderNoAsync")]
-        public async Task<IResultModel> GetPageByShopIdOderNoAsync([Required] int pageIndex, int pageSize,  Guid shopId, string oderNo)
+        [Parameters(name = "shopId", param = "商店 ID")]
+        [Parameters(name = "purchaseOderId", param = "采购订单 ID")]
+        [HttpGet("GetPageByShopIdPurchaseOderIdAsync")]
+        public async Task<IResultModel> GetPageByShopIdPurchaseOderIdAsync([Required] int pageIndex, int pageSize,  Guid shopId, int purchaseOderId)
         {
-            _logger.LogDebug($"根据商店ID：{shopId} 采购订单编码：{oderNo} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取采购订单商品列表");
-            return await _purchaseOderItemService.Value.GetPageByShopIdOderNoAsync(pageIndex, pageSize, shopId, oderNo);
+            _logger.LogDebug($"根据商店ID：{shopId} 采购订单ID：{purchaseOderId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取采购订单商品列表");
+            return await _purchaseOderItemService.Value.GetPageByShopIdPurchaseOderIdAsync(pageIndex, pageSize, shopId, purchaseOderId);
         }
 
-        [Description("通过指定采购订单ID删除采购订单商品")]
-        [OperationId("通过指定采购订单ID删除采购订单商品")]
-        [Parameters(name = "id", param = "采购订单商品ID")]
-        [HttpDelete]
+        [Description("根据采购订单商品 ID 删除采购订单商品")]
+        [Parameters(name = "id", param = "采购订单商品 ID")]
+        [HttpDelete("DeleteAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> Delete([Required] int id)
+        public async Task<IResultModel> DeleteAsync([Required] int id)
         {
             _logger.LogDebug("删除采购订单商品");
             return await _purchaseOderItemService.Value.RemoveAsync(id);
         }
 
-        [Description("通过指定采购订单商品ID集合批量删除采购订单商品")]
-        [OperationId("批量删除采购订单商品")]
-        [Parameters(name = "ids", param = "采购订单商品ID集合")]
-        [HttpDelete("BatchDelete")]
+        [Description("根据采购订单商品 ID 集合批量删除采购订单商品")]
+        [Parameters(name = "ids", param = "采购订单商品 ID 集合")]
+        [HttpDelete("BatchDeleteAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> BatchDelete([FromBody] List<int> ids)
+        public async Task<IResultModel> BatchDeleteAsync([FromBody] List<int> ids)
         {
             _logger.LogDebug("批量删除采购订单");
             return await _purchaseOderItemService.Value.RemoveAsync(ids);
         }
 
-        [Description("添加采购订单商品，成功后返回当前采购订单商品")]
-        [OperationId("添加采购订单商品")]
-        [HttpPost]
+        [Description("添加采购订单商品")]
+        [HttpPost("InsertAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> Add([FromBody] PurchaseOderItemCreateDto model)
+        public async Task<IResultModel> InsertAsync([FromBody] PurchaseOderItemCreateDto model)
         {
             _logger.LogDebug("添加采购订单商品");
             return await _createPurchaseOderItemService.Value.InsertAsync(model);
         }
 
-        [Description("Put修改采购订单，成功返回采购订单商品")]
-        [OperationId("修改采购订单商品")]
-        [HttpPut]
+        [Description("Put 修改采购订单")]
+        [HttpPut("UpdateAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> Update([FromBody] PurchaseOderItemUpdateDto model)
+        public async Task<IResultModel> UpdateAsync([FromBody] PurchaseOderItemUpdateDto model)
         {
             _logger.LogDebug("修改采购订单商品");
             return await _updatePurchaseOderItemService.Value.UpdateAsync(model);
         }
 
-        [Description("Patch使用修改采购订单，成功返回采购订单商品")]
-        [OperationId("修改采购订单商品")]
-        [HttpPatch]
+        [Description("Patch 修改采购订单")]
+        [HttpPatch("PatchAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> PatchUpdate([FromRoute] int id, [FromBody] JsonPatchDocument<PurchaseOderItemUpdateDto> patchDocument)
+        public async Task<IResultModel> PatchAsync([FromRoute] int id, [FromBody] JsonPatchDocument<PurchaseOderItemUpdateDto> patchDocument)
         {
             _logger.LogDebug("使用JsonPatch修改采购商品");
             return await _updatePurchaseOderItemService.Value.PatchAsync(id, patchDocument);

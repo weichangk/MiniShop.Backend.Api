@@ -9,8 +9,8 @@ using MiniShop.Backend.Model.Code;
 namespace MiniShop.Backend.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220410133149_InitMigration")]
-    partial class InitMigration
+    [Migration("20220428144426_UpdatePurchaseOder")]
+    partial class UpdatePurchaseOder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,9 +99,6 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -111,8 +108,6 @@ namespace MiniShop.Backend.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategorieId");
-
-                    b.HasIndex("SupplierId");
 
                     b.HasIndex("UnitId");
 
@@ -161,15 +156,10 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<Guid>("ShopId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("StoreId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StoreId");
 
                     b.HasIndex("SupplierId");
 
@@ -209,7 +199,7 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<int>("PurchaseOderId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PurchasePrice")
+                    b.Property<decimal>("RealPurchasePrice")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<Guid>("ShopId")
@@ -514,6 +504,9 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<Guid>("ShopId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("StoreId")
                         .HasColumnType("char(36)");
 
@@ -671,12 +664,6 @@ namespace MiniShop.Backend.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MiniShop.Backend.Model.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MiniShop.Backend.Model.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
@@ -686,12 +673,6 @@ namespace MiniShop.Backend.Api.Migrations
 
             modelBuilder.Entity("MiniShop.Backend.Model.PurchaseOder", b =>
                 {
-                    b.HasOne("MiniShop.Backend.Model.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MiniShop.Backend.Model.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
@@ -708,7 +689,7 @@ namespace MiniShop.Backend.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("MiniShop.Backend.Model.PurchaseOder", "PurchaseOder")
-                        .WithMany("PurchaseOderItems")
+                        .WithMany()
                         .HasForeignKey("PurchaseOderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

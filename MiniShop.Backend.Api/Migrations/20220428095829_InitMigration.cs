@@ -34,12 +34,12 @@ namespace MiniShop.Backend.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Deleted = table.Column<int>(nullable: false),
                     ShopId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     ModifiedTime = table.Column<DateTime>(nullable: false),
                     OperatorName = table.Column<string>(nullable: true),
-                    Deleted = table.Column<int>(nullable: false),
                     Contacts = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
@@ -57,16 +57,17 @@ namespace MiniShop.Backend.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Deleted = table.Column<int>(nullable: false),
                     StoreId = table.Column<Guid>(nullable: false),
                     ShopId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     ModifiedTime = table.Column<DateTime>(nullable: false),
                     OperatorName = table.Column<string>(nullable: true),
-                    Deleted = table.Column<int>(nullable: false),
                     Contacts = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true)
+                    Address = table.Column<string>(nullable: true),
+                    State = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,12 +80,12 @@ namespace MiniShop.Backend.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Deleted = table.Column<int>(nullable: false),
                     ShopId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     ModifiedTime = table.Column<DateTime>(nullable: false),
                     OperatorName = table.Column<string>(nullable: true),
-                    Deleted = table.Column<int>(nullable: false),
                     Code = table.Column<int>(nullable: false),
                     Contacts = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
@@ -120,12 +121,12 @@ namespace MiniShop.Backend.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Deleted = table.Column<int>(nullable: false),
                     ShopId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     ModifiedTime = table.Column<DateTime>(nullable: false),
                     OperatorName = table.Column<string>(nullable: true),
-                    Deleted = table.Column<int>(nullable: false),
                     VipType = table.Column<int>(nullable: false),
                     Code = table.Column<string>(nullable: true),
                     Sex = table.Column<int>(nullable: false),
@@ -151,7 +152,6 @@ namespace MiniShop.Backend.Api.Migrations
                     ModifiedTime = table.Column<DateTime>(nullable: false),
                     OperatorName = table.Column<string>(nullable: true),
                     OderNo = table.Column<string>(nullable: true),
-                    StoreId = table.Column<int>(nullable: false),
                     SupplierId = table.Column<int>(nullable: false),
                     OderAmount = table.Column<decimal>(nullable: false),
                     AuditState = table.Column<int>(nullable: false),
@@ -163,12 +163,6 @@ namespace MiniShop.Backend.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PurchaseOder", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PurchaseOder_Store_StoreId",
-                        column: x => x.StoreId,
-                        principalTable: "Store",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PurchaseOder_Supplier_SupplierId",
                         column: x => x.SupplierId,
@@ -267,7 +261,6 @@ namespace MiniShop.Backend.Api.Migrations
                     Price = table.Column<decimal>(nullable: false),
                     State = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false),
-                    SupplierId = table.Column<int>(nullable: false),
                     PriceType = table.Column<int>(nullable: false),
                     UnitId = table.Column<int>(nullable: false),
                     Picture = table.Column<string>(nullable: true)
@@ -279,12 +272,6 @@ namespace MiniShop.Backend.Api.Migrations
                         name: "FK_Item_Categorie_CategorieId",
                         column: x => x.CategorieId,
                         principalTable: "Categorie",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Item_Supplier_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Supplier",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -307,11 +294,12 @@ namespace MiniShop.Backend.Api.Migrations
                     ModifiedTime = table.Column<DateTime>(nullable: false),
                     OperatorName = table.Column<string>(nullable: true),
                     PurchaseOderId = table.Column<int>(nullable: false),
+                    OderNo = table.Column<string>(nullable: true),
                     ItemId = table.Column<int>(nullable: false),
                     Number = table.Column<decimal>(nullable: false),
                     GiveNumber = table.Column<decimal>(nullable: false),
                     Amount = table.Column<decimal>(nullable: false),
-                    PurchasePrice = table.Column<decimal>(nullable: false)
+                    RealPurchasePrice = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -412,11 +400,6 @@ namespace MiniShop.Backend.Api.Migrations
                 column: "CategorieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Item_SupplierId",
-                table: "Item",
-                column: "SupplierId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Item_UnitId",
                 table: "Item",
                 column: "UnitId");
@@ -426,11 +409,6 @@ namespace MiniShop.Backend.Api.Migrations
                 table: "Item",
                 columns: new[] { "ShopId", "Code" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOder_StoreId",
-                table: "PurchaseOder",
-                column: "StoreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOder_SupplierId",

@@ -9,8 +9,8 @@ using MiniShop.Backend.Model.Code;
 namespace MiniShop.Backend.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220423090950_UpdateItem")]
-    partial class UpdateItem
+    [Migration("20220428151903_UpdatePurchaseOder1")]
+    partial class UpdatePurchaseOder1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,10 +159,9 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SupplierName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
 
                     b.HasIndex("ShopId", "OderNo")
                         .IsUnique();
@@ -185,14 +184,8 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<decimal>("GiveNumber")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<string>("ItemCode")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ItemName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("ModifiedTime")
                         .HasColumnType("datetime(6)");
@@ -200,14 +193,11 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<decimal>("Number")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<string>("OderNo")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("OperatorName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<int>("PurchaseOderId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("RealPurchasePrice")
                         .HasColumnType("decimal(65,30)");
@@ -215,13 +205,11 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<Guid>("ShopId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("UnitName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("PurchaseOderId");
 
                     b.ToTable("PurchaseOderItem");
                 });
@@ -676,6 +664,30 @@ namespace MiniShop.Backend.Api.Migrations
                     b.HasOne("MiniShop.Backend.Model.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MiniShop.Backend.Model.PurchaseOder", b =>
+                {
+                    b.HasOne("MiniShop.Backend.Model.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MiniShop.Backend.Model.PurchaseOderItem", b =>
+                {
+                    b.HasOne("MiniShop.Backend.Model.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MiniShop.Backend.Model.PurchaseOder", "PurchaseOder")
+                        .WithMany()
+                        .HasForeignKey("PurchaseOderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

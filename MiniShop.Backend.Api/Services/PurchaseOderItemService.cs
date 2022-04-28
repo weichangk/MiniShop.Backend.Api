@@ -20,14 +20,6 @@ namespace MiniShop.Backend.Api.Services
 
         }
 
-        public async Task<IResultModel> GetByIdOnShopAsync(Guid shopId, int id)
-        {
-            var data = _repository.Value.TableNoTracking.Where(s => s.ShopId == shopId && s.Id == id);
-            var dto = await data.ProjectTo<PurchaseOderItemDto>(_mapper.Value.ConfigurationProvider).FirstOrDefaultAsync();
-            return ResultModel.Success(dto);
-        }
-
-
         public async Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId)
         {
             var data = _repository.Value.TableNoTracking;
@@ -36,10 +28,10 @@ namespace MiniShop.Backend.Api.Services
             return ResultModel.Success(list);
         }
 
-        public async Task<IResultModel> GetPageByShopIdOderNoAsync(int pageIndex, int pageSize, Guid shopId, string oderNo)
+        public async Task<IResultModel> GetPageByShopIdPurchaseOderIdAsync(int pageIndex, int pageSize, Guid shopId, int purchaseOderId)
         {
             var data = _repository.Value.TableNoTracking;
-            data = data.Where(s => s.ShopId == shopId && s.OderNo == oderNo);
+            data = data.Where(s => s.ShopId == shopId && s.PurchaseOderId == purchaseOderId);
             var list = await data.ProjectTo<PurchaseOderItemDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
             return ResultModel.Success(list);
         }

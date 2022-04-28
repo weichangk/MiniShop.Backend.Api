@@ -20,7 +20,7 @@ namespace MiniShop.Backend.Api.Services
 
         }
 
-        public async Task<IResultModel> GetByOderNoOnShopAsync(Guid shopId, string oderNo)
+        public async Task<IResultModel> GetByShopIdOderNoAsync(Guid shopId, string oderNo)
         {
             var data = _repository.Value.TableNoTracking.Where(s => s.ShopId == shopId && s.OderNo == oderNo);
             var dto = await data.ProjectTo<PurchaseOderDto>(_mapper.Value.ConfigurationProvider).FirstOrDefaultAsync();
