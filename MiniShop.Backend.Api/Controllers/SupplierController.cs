@@ -105,19 +105,6 @@ namespace MiniShop.Backend.Api.Controllers
         public async Task<IResultModel> DeleteAsync([Required] int id)
         {
             _logger.LogDebug("删除供应商");
-            var delData = (ResultModel<SupplierDto>)(await _supplierService.Value.GetByIdAsync(id));
-            if (delData == null || delData.Data == null)
-            {
-                _logger.LogError($"供应商删除错误：{id} 不存在");
-                return ResultModel.Failed($"供应商删除错误：{id} 不存在", (int)HttpStatusCode.NotFound);
-            }
-            else
-            {
-                if (delData.Data.Code == 0)
-                {
-                    return ResultModel.Failed("不能删除系统默认供应商", (int)HttpStatusCode.Forbidden);
-                }
-            }
             return await _supplierService.Value.RemoveAsync(id);
         }
 
@@ -128,22 +115,6 @@ namespace MiniShop.Backend.Api.Controllers
         public async Task<IResultModel> BatchDeleteAsync([FromBody] List<int> ids)
         {
             _logger.LogDebug("批量删除供应商");
-            foreach (var id in ids)
-            {
-                var delData = (ResultModel<SupplierDto>)(await _supplierService.Value.GetByIdAsync(id));
-                if (delData == null || delData.Data == null)
-                {
-                    _logger.LogError($"供应商删除错误：{id} 不存在");
-                    return ResultModel.Failed($"供应商删除错误：{id} 不存在", (int)HttpStatusCode.NotFound);
-                }
-                else
-                {
-                    if (delData.Data.Code == 0)
-                    {
-                        return ResultModel.Failed("不能删除系统默认供应商", (int)HttpStatusCode.Forbidden);
-                    }
-                }
-            }
             return await _supplierService.Value.RemoveAsync(ids);
         }
 

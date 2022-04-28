@@ -95,19 +95,6 @@ namespace MiniShop.Backend.Api.Controllers
         public async Task<IResultModel> DeleteAsync([Required] int id)
         {
             _logger.LogDebug("删除单位");
-            var delData = (ResultModel<UnitDto>)(await _unitService.Value.GetByIdAsync(id));
-            if (delData == null || delData.Data == null)
-            {
-                _logger.LogError($"单位删除错误：{id} 不存在");
-                return ResultModel.Failed($"单位删除错误：{id} 不存在", (int)HttpStatusCode.NotFound);
-            }
-            else
-            {
-                if (delData.Data.Code == 0)
-                {
-                    return ResultModel.Failed("不能删除系统默认单位", (int)HttpStatusCode.Forbidden);
-                }
-            }
             return await _unitService.Value.RemoveAsync(id);
         }
 
@@ -118,22 +105,6 @@ namespace MiniShop.Backend.Api.Controllers
         public async Task<IResultModel> BatchDeleteAsync([FromBody] List<int> ids)
         {
             _logger.LogDebug("批量删除单位");
-            foreach (var id in ids)
-            {
-                var delData = (ResultModel<UnitDto>)(await _unitService.Value.GetByIdAsync(id));
-                if (delData == null || delData.Data == null)
-                {
-                    _logger.LogError($"单位删除错误：{id} 不存在");
-                    return ResultModel.Failed($"单位删除错误：{id} 不存在", (int)HttpStatusCode.NotFound);
-                }
-                else
-                {
-                    if (delData.Data.Code == 0)
-                    {
-                        return ResultModel.Failed("不能删除系统默认单位", (int)HttpStatusCode.Forbidden);
-                    }
-                }
-            }
             return await _unitService.Value.RemoveAsync(ids);
         }
 
