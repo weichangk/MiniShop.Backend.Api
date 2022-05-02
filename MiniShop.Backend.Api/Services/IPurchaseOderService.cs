@@ -24,4 +24,9 @@ namespace MiniShop.Backend.Api.Services
     {
 
     }
+
+    public interface IAuditPurchaseOderService : IBaseService<PurchaseOder, PurchaseOderAuditDto, int>
+    {
+
+    }
 }

@@ -20,14 +20,18 @@ namespace MiniShop.Backend.Api.Controllers
         private readonly Lazy<IPurchaseOderService> _purchaseOderService;
         private readonly Lazy<ICreatePurchaseOderService> _createPurchaseOderService;
         private readonly Lazy<IUpdatePurchaseOderService> _updatePurchaseOderService;
+        private readonly Lazy<IAuditPurchaseOderService> _auditPurchaseOderService;
+
         public PurchaseOderController(ILogger<PurchaseOderController> logger, Lazy<IMapper> mapper,
             Lazy<IPurchaseOderService> purchaseOderService,
             Lazy<ICreatePurchaseOderService> createPurchaseOderService,
-            Lazy<IUpdatePurchaseOderService> updatePurchaseOderService) : base(logger, mapper)
+            Lazy<IUpdatePurchaseOderService> updatePurchaseOderService,
+            Lazy<IAuditPurchaseOderService> auditPurchaseOderService) : base(logger, mapper)
         {
             _purchaseOderService = purchaseOderService;
             _createPurchaseOderService = createPurchaseOderService;
             _updatePurchaseOderService = updatePurchaseOderService;
+            _auditPurchaseOderService = auditPurchaseOderService;
         }
 
         [Description("根据采购订单 ID 获取采购订单")]
@@ -112,6 +116,15 @@ namespace MiniShop.Backend.Api.Controllers
         {
             _logger.LogDebug("修改采购订单");
             return await _updatePurchaseOderService.Value.UpdateAsync(model);
+        }
+
+        [Description("审核采购订单")]
+        [HttpPut("AuditAsync")]
+        [Authorize(Roles = "ShopManager, ShopAssistant")]
+        public async Task<IResultModel> AuditAsync([FromBody] PurchaseOderAuditDto model)
+        {
+            _logger.LogDebug("审核采购订单");
+            return await _auditPurchaseOderService.Value.UpdateAsync(model);
         }
 
         [Description("Patch 修改采购订单")]

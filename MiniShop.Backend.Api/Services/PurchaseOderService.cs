@@ -69,4 +69,13 @@ namespace MiniShop.Backend.Api.Services
 
         }
     }
+
+    public class AuditPurchaseOderService : BaseService<PurchaseOder, PurchaseOderAuditDto, int>, IAuditPurchaseOderService, IDependency
+    {
+        public AuditPurchaseOderService(Lazy<IMapper> mapper, IUnitOfWork unitOfWork, ILogger<AuditPurchaseOderService> logger, Lazy<IRepository<PurchaseOder>> repository)
+        : base(mapper, unitOfWork, logger, repository)
+        {
+
+        }
+    }
 }
