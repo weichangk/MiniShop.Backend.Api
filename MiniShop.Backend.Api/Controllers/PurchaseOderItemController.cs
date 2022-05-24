@@ -112,7 +112,11 @@ namespace MiniShop.Backend.Api.Controllers
             return await _updatePurchaseOderItemService.Value.PatchAsync(id, patchDocument);
         }
 
-
+        public async Task<IResultModel> GetSumAmountByPurchaseOderIdAsync([Required] int purchaseOderId)
+        {
+            _logger.LogDebug($"根据采购订单ID：{purchaseOderId} 获取采购订单金额");
+            return await _purchaseOderItemService.Value.GetSumAmountByPurchaseOderIdAsync(purchaseOderId);
+        }
 
     }
 }

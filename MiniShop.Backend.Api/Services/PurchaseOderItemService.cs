@@ -23,7 +23,7 @@ namespace MiniShop.Backend.Api.Services
         public async Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId)
         {
             var data = _repository.Value.TableNoTracking;
-            data = data.Where(s => s.ShopId == shopId);
+            data = data.Where(p => p.ShopId == shopId);
             var list = await data.ProjectTo<PurchaseOderItemDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
             return ResultModel.Success(list);
         }
@@ -31,9 +31,17 @@ namespace MiniShop.Backend.Api.Services
         public async Task<IResultModel> GetPageByShopIdPurchaseOderIdAsync(int pageIndex, int pageSize, Guid shopId, int purchaseOderId)
         {
             var data = _repository.Value.TableNoTracking;
-            data = data.Where(s => s.ShopId == shopId && s.PurchaseOderId == purchaseOderId);
+            data = data.Where(p => p.ShopId == shopId && p.PurchaseOderId == purchaseOderId);
             var list = await data.ProjectTo<PurchaseOderItemDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
             return ResultModel.Success(list);
+        }
+
+        public async Task<IResultModel> GetSumAmountByPurchaseOderIdAsync(int purchaseOderId)
+        {
+            var data = _repository.Value.TableNoTracking;
+            data = data.Where(p => p.PurchaseOderId == purchaseOderId);
+            var sumAmount = await data.SumAsync(p => p.Amount);
+            return ResultModel.Success(sumAmount);
         }
     }
 
