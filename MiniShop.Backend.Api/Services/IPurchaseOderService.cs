@@ -22,7 +22,7 @@ namespace MiniShop.Backend.Api.Services
 
     public interface IUpdatePurchaseOderService : IBaseService<PurchaseOder, PurchaseOderUpdateDto, int>
     {
-
+        Task<IResultModel> UpdateOderAmountAsync(int id, decimal oderAmount);
     }
 
     public interface IAuditPurchaseOderService : IBaseService<PurchaseOder, PurchaseOderAuditDto, int>

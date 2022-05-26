@@ -68,6 +68,25 @@ namespace MiniShop.Backend.Api.Services
         {
 
         }
+
+        public async Task<IResultModel> UpdateOderAmountAsync(int id, decimal oderAmount)
+        {
+            var entity = await _repository.Value.GetByIdAsync(id);
+            if (entity == null)
+            {
+                _logger.LogError($"error：entity Id {id} does not exist");
+                return ResultModel.NotExists;
+            }
+            entity.OderAmount = oderAmount;
+            _repository.Value.Update(entity);
+
+            if (await UnitOfWork.SaveChangesAsync() > 0)
+            {
+                return ResultModel.Success(entity.OderAmount);
+            }
+            _logger.LogError($"error：Update Save failed");
+            return ResultModel.Failed("error：Update Save failed", 500);
+        }
     }
 
     public class AuditPurchaseOderService : BaseService<PurchaseOder, PurchaseOderAuditDto, int>, IAuditPurchaseOderService, IDependency
