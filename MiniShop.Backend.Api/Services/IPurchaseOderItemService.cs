@@ -14,6 +14,7 @@ namespace MiniShop.Backend.Api.Services
 
         Task<IResultModel> GetSumAmountByPurchaseOderIdAsync(int purchaseOderId);
 
+        Task<IResultModel>  GetListAllByShopIdPurchaseOderIdAsync(Guid shopId, int purchaseOderId, bool isDescending = false);
     }
 
     public interface ICreatePurchaseOderItemService : IBaseService<PurchaseOderItem, PurchaseOderItemCreateDto, int>
