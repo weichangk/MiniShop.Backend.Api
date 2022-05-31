@@ -103,11 +103,11 @@ namespace MiniShop.Backend.Api.Controllers
         [Description("根据采购收货订单ID获取采购金额合计")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "purchaseReceiveOderId", param = "采购收货订单ID")]
-        [HttpGet("GetSumNumberByPurchaseReceiveOderIdAsync")]
-        public async Task<IResultModel> GetSumNumberByPurchaseReceiveOderIdAsync([Required] int purchaseReceiveOderId)
+        [HttpGet("GetSumAmountByPurchaseReceiveOderIdAsync")]
+        public async Task<IResultModel> GetSumAmountByPurchaseReceiveOderIdAsync([Required] int purchaseReceiveOderId)
         {
             _logger.LogDebug($"根据采购收货订单ID：{purchaseReceiveOderId} 获取采购收货订单金额");
-            return await _purchaseReceiveOderItemService.Value.GetSumNumberByPurchaseReceiveOderIdAsync(purchaseReceiveOderId);
+            return await _purchaseReceiveOderItemService.Value.GetSumAmountByPurchaseReceiveOderIdAsync(purchaseReceiveOderId);
         }
 
     }

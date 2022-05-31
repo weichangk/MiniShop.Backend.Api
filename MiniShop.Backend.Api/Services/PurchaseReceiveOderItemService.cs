@@ -29,12 +29,12 @@ namespace MiniShop.Backend.Api.Services
             return ResultModel.Success(list);
         }
 
-        public async Task<IResultModel> GetSumNumberByPurchaseReceiveOderIdAsync(int purchaseReceiveOderId)
+        public async Task<IResultModel> GetSumAmountByPurchaseReceiveOderIdAsync(int purchaseReceiveOderId)
         {
             var data = _repository.Value.TableNoTracking;
             data = data.Where(p => p.PurchaseReceiveOderId == purchaseReceiveOderId);
-            var sumNumber = await data.SumAsync(p => p.Number);
-            return ResultModel.Success(sumNumber);
+            var sumAmount = await data.SumAsync(p => p.Amount);
+            return ResultModel.Success(sumAmount);
         }
     }
 

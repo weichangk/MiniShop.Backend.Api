@@ -10,7 +10,7 @@ namespace MiniShop.Backend.Api.Services
     {
         Task<IResultModel> GetPageByShopIdPurchaseReceiveOderIdAsync(int pageIndex, int pageSize, Guid shopId, int purchaseReceiveOderId);
 
-        Task<IResultModel> GetSumNumberByPurchaseReceiveOderIdAsync(int purchaseReceiveOderId);
+        Task<IResultModel> GetSumAmountByPurchaseReceiveOderIdAsync(int purchaseReceiveOderId);
 
     }
 

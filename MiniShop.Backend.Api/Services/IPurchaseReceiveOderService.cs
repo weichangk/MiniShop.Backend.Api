@@ -22,6 +22,6 @@ namespace MiniShop.Backend.Api.Services
 
     public interface IUpdatePurchaseReceiveOderService : IBaseService<PurchaseReceiveOder, PurchaseReceiveOderUpdateDto, int>
     {
-        // Task<IResultModel> UpdateOderAmountAsync(int id, decimal oderAmount);
+        Task<IResultModel> UpdateReceiveOderAmountAsync(int id, decimal oderAmount);
     }
 }

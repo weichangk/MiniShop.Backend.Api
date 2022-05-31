@@ -124,13 +124,13 @@ namespace MiniShop.Backend.Api.Controllers
             return await _updatePurchaseReceiveOderService.Value.PatchAsync(id, patchDocument);
         }
 
-        // [Description("修改采购收货订单金额")]
-        // [HttpPut("UpdateOderAmountAsync")]
-        // [Authorize(Roles = "ShopManager, ShopAssistant")]
-        // public async Task<IResultModel> UpdateOderAmountAsync([FromForm]int id, [FromForm]decimal oderAmount)
-        // {
-        //     _logger.LogDebug("修改采购收货订单金额");
-        //     return await _updatePurchaseReceiveOderService.Value.UpdateOderAmountAsync(id, oderAmount);
-        // }
+        [Description("修改采购收货订单金额")]
+        [HttpPut("UpdateReceiveOderAmountAsync")]
+        [Authorize(Roles = "ShopManager, ShopAssistant")]
+        public async Task<IResultModel> UpdateReceiveOderAmountAsync([FromForm]int id, [FromForm]decimal oderAmount)
+        {
+            _logger.LogDebug("修改采购收货订单金额");
+            return await _updatePurchaseReceiveOderService.Value.UpdateReceiveOderAmountAsync(id, oderAmount);
+        }
     }
 }
