@@ -77,6 +77,31 @@ namespace MiniShop.Backend.Api.Controllers
             return await _purchaseReceiveOderService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, oderNo);
         }
 
+        [Description("根据 shopId 获取已审核未退货采购订单分页列表")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "pageIndex", param = "索引页")]
+        [Parameters(name = "pageSize", param = "单页条数")]
+        [Parameters(name = "shopId", param = "shopId")]
+        [HttpGet("GetAuditedUnReturnedPageByShopIdAsync")]
+        public async Task<IResultModel> GetAuditedUnReturnedPageByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取已审核未退货采购订单分页列表");
+            return await _purchaseReceiveOderService.Value.GetAuditedUnReturnedPageByShopIdAsync(pageIndex, pageSize, shopId);
+        }
+
+        [Description("根据 shopId 附加查询条件获取已审核未退货采购订单分页列表")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "pageIndex", param = "索引页")]
+        [Parameters(name = "pageSize", param = "单页条数")]
+        [Parameters(name = "shopId", param = "shopId")]
+        [Parameters(name = "oderNo", param = "采购订单号")]
+        [HttpGet("GetAuditedUnReturnedPageByShopIdWhereQueryAsync")]
+        public async Task<IResultModel> GetAuditedUnReturnedPageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, string oderNo)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：采购订单号 {oderNo} 获取已审核未退货采购订单分页列表");
+            return await _purchaseReceiveOderService.Value.GetAuditedUnReturnedPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, oderNo);
+        }
+
         [Description("根据 ID 删除采购收货订单")]
         [Parameters(name = "id", param = "采购收货订单ID")]
         [HttpDelete("DeleteAsync")]
