@@ -61,6 +61,19 @@ namespace MiniShop.Backend.Api.Services
             var list = await data.ProjectTo<CategorieDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
             return ResultModel.Success(list);
         }
+
+        public async Task<IResultModel> GetListAllByShopIdAsync(Guid shopId, bool isDescending = false)
+        {
+            var data = _repository.Value.TableNoTracking;
+            data = data.Where(s => s.ShopId == shopId);
+            if (isDescending)
+            {
+                var Descendinglist = await data.OrderByDescending(k => k.Id).ProjectTo<CategorieDto>(_mapper.Value.ConfigurationProvider).ToListAsync();
+                return ResultModel.Success(Descendinglist);
+            }
+            var list = await data.OrderBy(k => k.Id).ProjectTo<CategorieDto>(_mapper.Value.ConfigurationProvider).ToListAsync();
+            return ResultModel.Success(list);
+        }
     }
 
     public class CreateCategorieService : BaseService<Categorie, CategorieCreateDto, int>, ICreateCategorieService, IDependency

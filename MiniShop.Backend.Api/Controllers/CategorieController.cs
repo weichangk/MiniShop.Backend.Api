@@ -89,6 +89,17 @@ namespace MiniShop.Backend.Api.Controllers
             return await _categorieService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, code, name);
         }
 
+        [Description("根据 shopId、是否排序条件获取类别列表")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "shopId", param = "shopId")]
+        [Parameters(name = "isDescending", param = "是否倒序")]
+        [HttpGet("GetListAllByShopIdAsync")]
+        public async Task<IResultModel> GetListAllByShopIdAsync(Guid shopId, bool isDescending = false)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} 是否倒序：{isDescending}条件获取类别列表");
+            return await _categorieService.Value.GetListAllByShopIdAsync(shopId, isDescending);
+        }
+
         [Description("根据 ID 删除类别")]
         [Parameters(name = "id", param = "类别 ID")]
         [HttpDelete("DeleteAsync")]
