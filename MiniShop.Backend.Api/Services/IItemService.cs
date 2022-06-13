@@ -13,6 +13,8 @@ namespace MiniShop.Backend.Api.Services
         Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId);
 
         Task<IResultModel> GetPageByShopIdWhereQueryAsync(int pageIndex, int pageSize, Guid shopId, string code, string name);
+
+        Task<IResultModel> GetListAllByShopIdAsync(Guid shopId, bool isDescending = false);
     }
 
     public interface ICreateItemService : IBaseService<Item, ItemCreateDto, int>

@@ -20,7 +20,7 @@ namespace MiniShop.Backend.Api.Controllers
         private readonly Lazy<IPurchaseReturnOderItemService> _purchaseReturnOderItemService;
         private readonly Lazy<ICreatePurchaseReturnOderItemService> _createPurchaseReturnOderItemService;
         private readonly Lazy<IUpdatePurchaseReturnOderItemService> _updatePurchaseReturnOderItemService;
-        public PurchaseReturnOderItemController(ILogger<PurchaseReturnOderController> logger, Lazy<IMapper> mapper,
+        public PurchaseReturnOderItemController(ILogger<PurchaseReturnOderItemController> logger, Lazy<IMapper> mapper,
             Lazy<IPurchaseReturnOderItemService> purchaseReturnOderItemService,
             Lazy<ICreatePurchaseReturnOderItemService> createPurchaseReturnOderItemService,
             Lazy<IUpdatePurchaseReturnOderItemService> updatePurchaseReturnOderItemService) : base(logger, mapper)
@@ -82,7 +82,7 @@ namespace MiniShop.Backend.Api.Controllers
             return await _createPurchaseReturnOderItemService.Value.InsertAsync(model);
         }
 
-        [Description("Put 修改采购退货订单")]
+        [Description("Put 修改采购退货订单商品")]
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
         public async Task<IResultModel> UpdateAsync([FromBody] PurchaseReturnOderItemUpdateDto model)
@@ -91,7 +91,7 @@ namespace MiniShop.Backend.Api.Controllers
             return await _updatePurchaseReturnOderItemService.Value.UpdateAsync(model);
         }
 
-        [Description("Patch 修改采购退货订单")]
+        [Description("Patch 修改采购退货订单商品")]
         [HttpPatch("PatchAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
         public async Task<IResultModel> PatchAsync([FromRoute] int id, [FromBody] JsonPatchDocument<PurchaseReturnOderItemUpdateDto> patchDocument)

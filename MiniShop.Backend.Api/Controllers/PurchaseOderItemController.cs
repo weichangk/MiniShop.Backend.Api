@@ -20,7 +20,7 @@ namespace MiniShop.Backend.Api.Controllers
         private readonly Lazy<IPurchaseOderItemService> _purchaseOderItemService;
         private readonly Lazy<ICreatePurchaseOderItemService> _createPurchaseOderItemService;
         private readonly Lazy<IUpdatePurchaseOderItemService> _updatePurchaseOderItemService;
-        public PurchaseOderItemController(ILogger<PurchaseOderController> logger, Lazy<IMapper> mapper,
+        public PurchaseOderItemController(ILogger<PurchaseOderItemController> logger, Lazy<IMapper> mapper,
             Lazy<IPurchaseOderItemService> purchaseOderItemService,
             Lazy<ICreatePurchaseOderItemService> createPurchaseOderItemService,
             Lazy<IUpdatePurchaseOderItemService> updatePurchaseOderItemService) : base(logger, mapper)

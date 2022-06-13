@@ -125,6 +125,8 @@ namespace MiniShop.Backend.Api.Controllers
         }
 
         [Description("修改采购退货订单金额")]
+        [Parameters(name = "id", param = "ID")]
+        [Parameters(name = "oderAmount", param = "订单金额")]
         [HttpPut("UpdateReturnOderAmountAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
         public async Task<IResultModel> UpdateReturnOderAmountAsync([FromForm]int id, [FromForm]decimal oderAmount)

@@ -20,7 +20,7 @@ namespace MiniShop.Backend.Api.Controllers
         private readonly Lazy<IPurchaseReceiveOderItemService> _purchaseReceiveOderItemService;
         private readonly Lazy<ICreatePurchaseReceiveOderItemService> _createPurchaseReceiveOderItemService;
         private readonly Lazy<IUpdatePurchaseReceiveOderItemService> _updatePurchaseReceiveOderItemService;
-        public PurchaseReceiveOderItemController(ILogger<PurchaseReceiveOderController> logger, Lazy<IMapper> mapper,
+        public PurchaseReceiveOderItemController(ILogger<PurchaseReceiveOderItemController> logger, Lazy<IMapper> mapper,
             Lazy<IPurchaseReceiveOderItemService> purchaseReceiveOderItemService,
             Lazy<ICreatePurchaseReceiveOderItemService> createPurchaseReceiveOderItemService,
             Lazy<IUpdatePurchaseReceiveOderItemService> updatePurchaseReceiveOderItemService) : base(logger, mapper)
@@ -91,7 +91,7 @@ namespace MiniShop.Backend.Api.Controllers
             return await _createPurchaseReceiveOderItemService.Value.InsertAsync(model);
         }
 
-        [Description("Put 修改采购收货订单")]
+        [Description("Put 修改采购收货订单商品")]
         [HttpPut("UpdateAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
         public async Task<IResultModel> UpdateAsync([FromBody] PurchaseReceiveOderItemUpdateDto model)
@@ -100,7 +100,7 @@ namespace MiniShop.Backend.Api.Controllers
             return await _updatePurchaseReceiveOderItemService.Value.UpdateAsync(model);
         }
 
-        [Description("Patch 修改采购收货订单")]
+        [Description("Patch 修改采购收货订单商品")]
         [HttpPatch("PatchAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
         public async Task<IResultModel> PatchAsync([FromRoute] int id, [FromBody] JsonPatchDocument<PurchaseReceiveOderItemUpdateDto> patchDocument)
