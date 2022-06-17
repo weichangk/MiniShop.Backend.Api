@@ -3,6 +3,7 @@ using MiniShop.Backend.Model;
 using Weick.Orm.Core.Result;
 using System;
 using System.Threading.Tasks;
+using MiniShop.Backend.Model.Enums;
 
 namespace MiniShop.Backend.Api.Services
 {
@@ -27,6 +28,7 @@ namespace MiniShop.Backend.Api.Services
     public interface IUpdatePurchaseOderService : IBaseService<PurchaseOder, PurchaseOderUpdateDto, int>
     {
         Task<IResultModel> UpdateOderAmountAsync(int id, decimal oderAmount);
+        Task<IResultModel> UpdatePurchaseOderStatusAsync(int id, EnumPurchaseOrderStatus state);
     }
 
     public interface IAuditPurchaseOderService : IBaseService<PurchaseOder, PurchaseOderAuditDto, int>

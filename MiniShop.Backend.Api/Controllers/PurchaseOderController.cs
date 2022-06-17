@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using MiniShop.Backend.Model.Enums;
 
 namespace MiniShop.Backend.Api.Controllers
 {
@@ -168,6 +169,15 @@ namespace MiniShop.Backend.Api.Controllers
         {
             _logger.LogDebug("修改采购订单金额");
             return await _updatePurchaseOderService.Value.UpdateOderAmountAsync(id, oderAmount);
+        }
+
+        [Description("修改采购订单状态")]
+        [HttpPut("UpdatePurchaseOderStatusAsync")]
+        [Authorize(Roles = "ShopManager, ShopAssistant")]
+        public async Task<IResultModel> UpdatePurchaseOderStatusAsync([FromForm]int id, [FromForm]EnumPurchaseOrderStatus state)
+        {
+            _logger.LogDebug("修改采购订单金额");
+            return await _updatePurchaseOderService.Value.UpdatePurchaseOderStatusAsync(id, state);
         }
     }
 }
