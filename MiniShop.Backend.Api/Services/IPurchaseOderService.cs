@@ -18,6 +18,10 @@ namespace MiniShop.Backend.Api.Services
         Task<IResultModel> GetPageByShopIdWhereQueryAsync(int pageIndex, int pageSize, Guid shopId, string oderNo);
 
         Task<IResultModel> GetAuditedUnReceivedPageByShopIdWhereQueryAsync(int pageIndex, int pageSize, Guid shopId, string oderNo);
+
+        Task<IResultModel> GetAuditedUnReturnPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId);
+
+        Task<IResultModel> GetAuditedUnReturnPageByShopIdWhereQueryAsync(int pageIndex, int pageSize, Guid shopId, string oderNo);
     }
 
     public interface ICreatePurchaseOderService : IBaseService<PurchaseOder, PurchaseOderCreateDto, int>

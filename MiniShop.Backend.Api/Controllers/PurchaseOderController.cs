@@ -80,6 +80,18 @@ namespace MiniShop.Backend.Api.Controllers
             return await _purchaseOderService.Value.GetAuditedUnReceivedPageByShopIdAsync(pageIndex, pageSize, shopId);
         }
 
+        [Description("根据 shopId 获取已审核未退货采购订单分页列表")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "pageIndex", param = "索引页")]
+        [Parameters(name = "pageSize", param = "单页条数")]
+        [Parameters(name = "shopId", param = "shopId")]
+        [HttpGet("GetAuditedUnReturnPageByShopIdAsync")]
+        public async Task<IResultModel> GetAuditedUnReturnPageByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取已审核未退货采购订单分页列表");
+            return await _purchaseOderService.Value.GetAuditedUnReturnPageByShopIdAsync(pageIndex, pageSize, shopId);
+        }
+
         [Description("根据 shopId 附加查询条件获取采购订单分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
@@ -104,6 +116,19 @@ namespace MiniShop.Backend.Api.Controllers
         {
             _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：采购订单号 {oderNo} 获取已审核未收货采购订单分页列表");
             return await _purchaseOderService.Value.GetAuditedUnReceivedPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, oderNo);
+        }
+
+        [Description("根据 shopId 附加查询条件获取已审核未退货采购订单分页列表")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "pageIndex", param = "索引页")]
+        [Parameters(name = "pageSize", param = "单页条数")]
+        [Parameters(name = "shopId", param = "shopId")]
+        [Parameters(name = "oderNo", param = "采购订单号")]
+        [HttpGet("GetAuditedUnReturnPageByShopIdWhereQueryAsync")]
+        public async Task<IResultModel> GetAuditedUnReturnPageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, string oderNo)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：采购订单号 {oderNo} 获取已审核未退货采购订单分页列表");
+            return await _purchaseOderService.Value.GetAuditedUnReturnPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, oderNo);
         }
 
         [Description("根据 ID 删除采购订单")]

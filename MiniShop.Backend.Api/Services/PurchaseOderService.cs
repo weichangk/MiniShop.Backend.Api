@@ -45,6 +45,14 @@ namespace MiniShop.Backend.Api.Services
             return ResultModel.Success(list);
         }
 
+        public async Task<IResultModel> GetAuditedUnReturnPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId)
+        {
+            var data = _repository.Value.TableNoTracking;
+            data = data.Where(p => p.ShopId == shopId && p.AuditState == EnumAuditStatus.Audited && (p.OrderState == EnumPurchaseOrderStatus.Received));
+            var list = await data.ProjectTo<PurchaseOderDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
+            return ResultModel.Success(list);
+        }
+
         public async Task<IResultModel> GetPageByShopIdWhereQueryAsync(int pageIndex, int pageSize , Guid shopId, string oderNo)
         {
             var data = _repository.Value.TableNoTracking;
@@ -63,6 +71,20 @@ namespace MiniShop.Backend.Api.Services
         {
             var data = _repository.Value.TableNoTracking;
             data = data.Where(p => p.ShopId == shopId && p.AuditState == EnumAuditStatus.Audited && (p.OrderState == EnumPurchaseOrderStatus.PartReturned || p.OrderState == EnumPurchaseOrderStatus.UnReceived));
+
+            oderNo = System.Web.HttpUtility.UrlDecode(oderNo);
+            if (!string.IsNullOrEmpty(oderNo))
+            {
+                data = data.Where(s => s.OderNo != null && s.OderNo.Contains(oderNo));
+            }
+            var list = await data.ProjectTo<PurchaseOderDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);
+            return ResultModel.Success(list);
+        }
+
+        public async Task<IResultModel> GetAuditedUnReturnPageByShopIdWhereQueryAsync(int pageIndex, int pageSize , Guid shopId, string oderNo)
+        {
+            var data = _repository.Value.TableNoTracking;
+            data = data.Where(p => p.ShopId == shopId && p.AuditState == EnumAuditStatus.Audited && (p.OrderState == EnumPurchaseOrderStatus.Received));
 
             oderNo = System.Web.HttpUtility.UrlDecode(oderNo);
             if (!string.IsNullOrEmpty(oderNo))
