@@ -36,6 +36,19 @@ namespace MiniShop.Backend.Api.Services
             var sumAmount = await data.SumAsync(p => p.Amount);
             return ResultModel.Success(sumAmount);
         }
+
+        public async Task<IResultModel> GetListAllByShopIdPurchaseReturnOderIdAsync(Guid shopId, int purchaseReturnOderId, bool isDescending = false)
+        {
+            var data = _repository.Value.TableNoTracking;
+            data = data.Where(p => p.ShopId == shopId && p.PurchaseReturnOderId == purchaseReturnOderId);
+            if (isDescending)
+            {
+                var Descendinglist = await data.OrderByDescending(k => k.Id).ProjectTo<PurchaseReturnOderItemDto>(_mapper.Value.ConfigurationProvider).ToListAsync();
+                return ResultModel.Success(Descendinglist);
+            }
+            var list = await data.OrderBy(k => k.Id).ProjectTo<PurchaseReturnOderItemDto>(_mapper.Value.ConfigurationProvider).ToListAsync();
+            return ResultModel.Success(list);
+        }
     }
 
     public class CreatePurchaseReturnOderItemService : BaseService<PurchaseReturnOderItem, PurchaseReturnOderItemCreateDto, int>, ICreatePurchaseReturnOderItemService, IDependency

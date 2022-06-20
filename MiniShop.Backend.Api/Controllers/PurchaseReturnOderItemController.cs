@@ -40,6 +40,15 @@ namespace MiniShop.Backend.Api.Controllers
             return await _purchaseReturnOderItemService.Value.GetByIdAsync(id);
         }
 
+        [Description("根据 shopId、purchaseReturnOderId 获取全部采购退货订单商品列表")]
+        [ResponseCache(Duration = 0)]
+        [HttpGet("GetListAllByShopIdPurchaseReturnOderIdAsync")]
+        public async Task<IResultModel> GetListAllByShopIdPurchaseReturnOderIdAsync(Guid shopId, int purchaseReturnOderId, bool isDescending = false)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} purchaseReturnOderId{purchaseReturnOderId} 获取全部采购退货订单商品列表");
+            return await _purchaseReturnOderItemService.Value.GetListAllByShopIdPurchaseReturnOderIdAsync(shopId, purchaseReturnOderId, isDescending);
+        }
+
         [Description("根据商店 ID、采购退货订单 ID 获取采购退货订单商品列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]

@@ -30,6 +30,27 @@ namespace MiniShop.Backend.Api.Controllers
             _updateStockService = updateStockService;
         }
 
+        [Description("根据商品库存 ID 获取商品库存")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "id", param = "商品库存ID")]
+        [HttpGet("GetByIdAsync")]
+        public async Task<IResultModel> GetByIdAsync([Required] int id)
+        {
+            _logger.LogDebug($"根据商品库存 ID：{id} 获取商品库存");
+            return await _stockService.Value.GetByIdAsync(id);
+        }
+
+        [Description("根据 shopId，itemId 获取商品库存")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "shopId", param = "shopId")]
+        [Parameters(name = "itemId", param = "商品ID")]
+        [HttpGet("GetByShopIdAndItemIdAsync")]
+        public async Task<IResultModel> GetByShopIdAndItemIdAsync(Guid shopId, int itemId)
+        {
+            _logger.LogDebug($"根据 shopId：{shopId} itemId：{itemId} 获取商品库存");
+            return await _stockService.Value.GetByShopIdAndItemIdAsync(shopId, itemId);
+        }
+
         [Description("根据 shopId 获取库存分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]
@@ -49,10 +70,10 @@ namespace MiniShop.Backend.Api.Controllers
         [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "name", param = "商品名称")]
         [HttpGet("GetPageByShopIdWhereQueryAsync")]
-        public async Task<IResultModel> GetPageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, string name)
+        public async Task<IResultModel> GetPageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, string code, string name)
         {
-            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：商品名称 {name} 获取库存分页列表");
-            return await _stockService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, name);
+            _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页 {pageIndex} 单页条数 {pageSize} 查询条件：商品编码 {code} 商品名称 {name} 获取库存分页列表");
+            return await _stockService.Value.GetPageByShopIdWhereQueryAsync(pageIndex, pageSize, shopId, code, name);
         }
 
         [Description("根据 ID 删除库存")]
@@ -100,6 +121,50 @@ namespace MiniShop.Backend.Api.Controllers
         {
             _logger.LogDebug("使用JsonPatch修改库存");
             return await _updateStockService.Value.PatchAsync(id, patchDocument);
+        }
+
+        [Description("根据商品库存ID和商品ID增加或减少库存")]
+        [HttpPut("AddOrSubStockNumberAsync")]
+        [Authorize(Roles = "ShopManager, ShopAssistant")]
+        public async Task<IResultModel> AddOrSubStockNumberAsync([FromForm] Guid shopId, [FromForm] int itemId, [FromForm] bool isAdd, [FromForm] decimal number)
+        {
+            _logger.LogDebug("根据商品库存ID和商品ID增加或减少库存");
+            var getStock =  (ResultModel<StockDto>)(await _stockService.Value.GetByShopIdAndItemIdAsync(shopId, itemId));
+            if(getStock.Success)
+            {
+                decimal oldNumber = 0;
+                int id = 0;
+                if(getStock.Data == null)
+                {
+                    StockCreateDto stockCreateDto = new StockCreateDto
+                    {
+                        ShopId = shopId,
+                        ItemId = itemId,
+                        Number = 0,
+                    };
+                    var getStockCreate = (ResultModel<StockCreateDto>)(await _createStockService.Value.InsertAsync(stockCreateDto));
+                    if(!getStockCreate.Success)
+                    {
+                        return ResultModel.Failed("error：Add Or Sub StockNumber failed", 500); 
+                    }
+                    id = getStockCreate.Data.Id;
+                    oldNumber = 0;
+                }
+                else
+                {
+                    id = getStock.Data.Id;
+                    oldNumber = getStock.Data.Number;
+                }
+                var doc = new JsonPatchDocument<StockUpdateDto>();
+                oldNumber = isAdd ? oldNumber + number : oldNumber - number;
+                doc.Replace(item => item.Number, oldNumber);
+                await _updateStockService.Value.PatchAsync(id, doc);
+                return ResultModel.Success(oldNumber);
+            }
+            else
+            {
+               return ResultModel.Failed("error：Add Or Sub StockNumber failed", 500); 
+            }
         }
     }
 }
