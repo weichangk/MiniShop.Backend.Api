@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniShop.Backend.Model.Code;
 
 namespace MiniShop.Backend.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220621151611_AddPayment20220621")]
+    partial class AddPayment20220621
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,8 +129,8 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Enable")
-                        .HasColumnType("int");
+                    b.Property<bool>("Enable")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("ModifiedTime")
                         .HasColumnType("datetime(6)");
@@ -142,8 +144,8 @@ namespace MiniShop.Backend.Api.Migrations
                     b.Property<Guid>("ShopId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("SystemPayment")
-                        .HasColumnType("int");
+                    b.Property<bool>("SystemPayment")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
