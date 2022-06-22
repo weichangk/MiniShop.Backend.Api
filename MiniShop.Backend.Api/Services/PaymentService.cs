@@ -43,7 +43,7 @@ namespace MiniShop.Backend.Api.Services
             code = System.Web.HttpUtility.UrlDecode(code);
             if (!string.IsNullOrEmpty(code))
             {
-                data = data.Where(s => s.Code.ToString().Contains(code));
+                data = data.Where(s => s.Code.Contains(code));
             }
             name = System.Web.HttpUtility.UrlDecode(name);
             if (!string.IsNullOrEmpty(name))
