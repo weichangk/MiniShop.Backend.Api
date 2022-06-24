@@ -33,9 +33,13 @@ namespace MiniShop.Backend.Api.Services
             var data = _repository.Value.TableNoTracking;
             data = data.Where(s => s.ShopId == shopId);
 
-            if(startTime != null && endTime != null)
+            if(startTime != null)
             {
-                data = data.Where(s => s.CreatedTime >= startTime && s.CreatedTime <= endTime);
+                data = data.Where(s => s.CreatedTime >= startTime);
+            }
+            if(endTime != null)
+            {
+                data = data.Where(s => s.CreatedTime <= endTime);
             }
 
             var list = await data.ProjectTo<SaleFlowDto>(_mapper.Value.ConfigurationProvider).ToPagedListAsync(pageIndex, pageSize);

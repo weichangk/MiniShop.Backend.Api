@@ -81,8 +81,8 @@ namespace MiniShop.Backend.Api.Controllers
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
         [Parameters(name = "shopId", param = "shopId")]
-        [HttpGet("GetPayFlowBillInfoageByShopIdAsync")]
-        public async Task<IResultModel> GetPayFlowBillInfoageByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
+        [HttpGet("GetPayFlowBillInfoByShopIdAsync")]
+        public async Task<IResultModel> GetPayFlowBillInfoByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
         {
             _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取付款流水销售订单分页列表");
             List<PayFlowBillInfoDto> list = new List<PayFlowBillInfoDto>();
@@ -96,7 +96,6 @@ namespace MiniShop.Backend.Api.Controllers
                     if(getBillInfo.Success)
                     {
                         model.OperatorName = getBillInfo.Data.OperatorName;
-                        model.CreatedTime = getBillInfo.Data.CreatedTime;
                         model.SaleWay = getBillInfo.Data.SaleWay;
                         model.SaleMoney = getBillInfo.Data.SaleMoney;
                         model.MemberId = getBillInfo.Data.MemberId;
@@ -108,7 +107,7 @@ namespace MiniShop.Backend.Api.Controllers
                         return ResultModel.Failed("error：GetPayFlowBillInfoageByShopIdAsync failed", 500); 
                     }         
                 }
-                var pageList = await list.AsQueryable<PayFlowBillInfoDto>().ToPagedListAsync(pageIndex, pageSize);
+                var pageList = list.AsQueryable<PayFlowBillInfoDto>().ToPagedList(pageIndex, pageSize);
                 return ResultModel.Success(pageList);
             }
             else
@@ -124,8 +123,8 @@ namespace MiniShop.Backend.Api.Controllers
         [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "startTime", param = "查询起始时间")]
         [Parameters(name = "endTime", param = "查询结束时间")]
-        [HttpGet("GetPayFlowBillInfoageByShopIdWhereQueryAsync")]
-        public async Task<IResultModel> GetPayFlowBillInfoageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, DateTime? startTime, DateTime? endTime)
+        [HttpGet("GetPayFlowBillInfoByShopIdWhereQueryAsync")]
+        public async Task<IResultModel> GetPayFlowBillInfoByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, DateTime? startTime, DateTime? endTime)
         {
             _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 查询起始时间{startTime} 查询结束时间{endTime} 获取付款流水销售订单分页列表");
             List<PayFlowBillInfoDto> list = new List<PayFlowBillInfoDto>();
@@ -139,7 +138,6 @@ namespace MiniShop.Backend.Api.Controllers
                     if(getBillInfo.Success)
                     {
                         model.OperatorName = getBillInfo.Data.OperatorName;
-                        model.CreatedTime = getBillInfo.Data.CreatedTime;
                         model.SaleWay = getBillInfo.Data.SaleWay;
                         model.SaleMoney = getBillInfo.Data.SaleMoney;
                         model.MemberId = getBillInfo.Data.MemberId;
@@ -151,7 +149,7 @@ namespace MiniShop.Backend.Api.Controllers
                         return ResultModel.Failed("error：GetPayFlowBillInfoageByShopIdWhereQueryAsync failed", 500); 
                     }         
                 }
-                var pageList = await list.AsQueryable<PayFlowBillInfoDto>().ToPagedListAsync(pageIndex, pageSize);
+                var pageList = list.AsQueryable<PayFlowBillInfoDto>().ToPagedList(pageIndex, pageSize);
                 return ResultModel.Success(pageList);
             }
             else
@@ -165,8 +163,8 @@ namespace MiniShop.Backend.Api.Controllers
         [Parameters(name = "pageIndex", param = "索引页")]
         [Parameters(name = "pageSize", param = "单页条数")]
         [Parameters(name = "shopId", param = "shopId")]
-        [HttpGet("GetSaleFlowBillInfoageByShopIdAsync")]
-        public async Task<IResultModel> GetSaleFlowBillInfoageByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
+        [HttpGet("GetSaleFlowBillInfoByShopIdAsync")]
+        public async Task<IResultModel> GetSaleFlowBillInfoByShopIdAsync([Required] int pageIndex, int pageSize, Guid shopId)
         {
             _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 获取销售流水销售订单分页列表");
             List<SaleFlowBillInfoDto> list = new List<SaleFlowBillInfoDto>();
@@ -180,7 +178,6 @@ namespace MiniShop.Backend.Api.Controllers
                     if(getBillInfo.Success)
                     {
                         model.OperatorName = getBillInfo.Data.OperatorName;
-                        model.CreatedTime = getBillInfo.Data.CreatedTime;
                         model.SaleWay = getBillInfo.Data.SaleWay;
 
                         list.Add(model);
@@ -190,7 +187,7 @@ namespace MiniShop.Backend.Api.Controllers
                         return ResultModel.Failed("error：GetSaleFlowBillInfoageByShopIdAsync failed", 500); 
                     }         
                 }
-                var pageList = await list.AsQueryable<SaleFlowBillInfoDto>().ToPagedListAsync(pageIndex, pageSize);
+                var pageList = list.AsQueryable<SaleFlowBillInfoDto>().ToPagedList(pageIndex, pageSize);
                 return ResultModel.Success(pageList);
             }
             else
@@ -206,8 +203,8 @@ namespace MiniShop.Backend.Api.Controllers
         [Parameters(name = "shopId", param = "shopId")]
         [Parameters(name = "startTime", param = "查询起始时间")]
         [Parameters(name = "endTime", param = "查询结束时间")]
-        [HttpGet("GetSaleFlowBillInfoageByShopIdWhereQueryAsync")]
-        public async Task<IResultModel> GetSaleFlowBillInfoageByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, DateTime? startTime, DateTime? endTime)
+        [HttpGet("GetSaleFlowBillInfoByShopIdWhereQueryAsync")]
+        public async Task<IResultModel> GetSaleFlowBillInfoByShopIdWhereQueryAsync([Required] int pageIndex, int pageSize, Guid shopId, DateTime? startTime, DateTime? endTime)
         {
             _logger.LogDebug($"根据 shopId：{shopId} 分页条件：索引页{pageIndex} 单页条数{pageSize} 查询起始时间{startTime} 查询结束时间{endTime} 获取销售流水销售订单分页列表");
             List<SaleFlowBillInfoDto> list = new List<SaleFlowBillInfoDto>();
@@ -221,7 +218,6 @@ namespace MiniShop.Backend.Api.Controllers
                     if(getBillInfo.Success)
                     {
                         model.OperatorName = getBillInfo.Data.OperatorName;
-                        model.CreatedTime = getBillInfo.Data.CreatedTime;
                         model.SaleWay = getBillInfo.Data.SaleWay;
 
                         list.Add(model);
@@ -231,7 +227,7 @@ namespace MiniShop.Backend.Api.Controllers
                         return ResultModel.Failed("error：GetSaleFlowBillInfoageByShopIdWhereQueryAsync failed", 500); 
                     }         
                 }
-                var pageList = await list.AsQueryable<SaleFlowBillInfoDto>().ToPagedListAsync(pageIndex, pageSize);
+                var pageList = list.AsQueryable<SaleFlowBillInfoDto>().ToPagedList(pageIndex, pageSize);
                 return ResultModel.Success(pageList);
             }
             else
