@@ -62,6 +62,16 @@ namespace MiniShop.Backend.Api.Controllers
             return await _vipTypeService.Value.GetMaxCodeByShopIdAsync(shopId);
         }
 
+        [Description("根据 shopId 获取供会员类别")]
+        [ResponseCache(Duration = 0)]
+        [Parameters(name = "shopId", param = "ShopId")]
+        [HttpGet("GetByShopIdAsync")]
+        public async Task<IResultModel> GetByShopIdAsync([Required] Guid shopId)
+        {
+            _logger.LogDebug($"根据 ShopId：{shopId} 获取会员类别");
+            return await _vipTypeService.Value.GetByShopIdAsync(shopId);
+        }
+
         [Description("根据 shopId 获取会员类别分页列表")]
         [ResponseCache(Duration = 0)]
         [Parameters(name = "pageIndex", param = "索引页")]

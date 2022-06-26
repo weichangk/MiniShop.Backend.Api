@@ -10,6 +10,7 @@ namespace MiniShop.Backend.Api.Services
     {
         Task<IResultModel> GetByShopIdCodeAsync(Guid shopId, int code);
         Task<IResultModel> GetMaxCodeByShopIdAsync(Guid shopId);
+        Task<IResultModel> GetByShopIdAsync(Guid shopId);
         Task<IResultModel> GetPageByShopIdAsync(int pageIndex, int pageSize, Guid shopId);
         Task<IResultModel> GetPageByShopIdWhereQueryAsync(int pageIndex, int pageSize, Guid shopId, string code, string name);
         Task<IResultModel> GetListAllByShopIdAsync(Guid shopId, bool isDescending = false);
