@@ -16,9 +16,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.4.1" />
     <PackageReference Include="Weick.MemoryCache" Version="1.0.0" />
-    <PackageReference Include="Weick.CommonTools.Core" Version="1.0.0" />
+    <!-- <PackageReference Include="Weick.CommonTools.Core" Version="1.0.0" /> -->
     <PackageReference Include="Weick.Serilog" Version="1.0.0" />
-    <PackageReference Include="MiniShop.Backend.Model" Version="1.0.0" />
+    <!-- <PackageReference Include="MiniShop.Backend.Model" Version="1.0.0" /> -->
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,11 @@
     <Content Update="Config\logging.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MiniShop.Backend.Model\MiniShop.Backend.Model\MiniShop.Backend.Model.csproj" />
+    <ProjectReference Include="..\..\Weick.CommonTools.Core\Weick.CommonTools.Core\Weick.CommonTools.Core.csproj"/>
   </ItemGroup>
 
 </Project>
