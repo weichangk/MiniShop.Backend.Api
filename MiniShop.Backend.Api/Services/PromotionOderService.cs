@@ -62,31 +62,12 @@ namespace MiniShop.Backend.Api.Services
         }
     }
 
-    public class AuditPromotionOderService : BaseService<PromotionOder, PromotionOderAuditDto, int>, IAuditPromotionOderService, IDependency
+    public class UpdatePromotionOderService : BaseService<PromotionOder, PromotionOderUpdateDto, int>, IUpdatePromotionOderService, IDependency
     {
-        public AuditPromotionOderService(Lazy<IMapper> mapper, IUnitOfWork unitOfWork, ILogger<AuditPromotionOderService> logger, Lazy<IRepository<PromotionOder>> repository)
+        public UpdatePromotionOderService(Lazy<IMapper> mapper, IUnitOfWork unitOfWork, ILogger<UpdatePromotionOderService> logger, Lazy<IRepository<PromotionOder>> repository)
         : base(mapper, unitOfWork, logger, repository)
         {
 
-        }
-
-        public async Task<IResultModel> AuditPromotionOderStatusAsync(int id, EnumAuditStatus state)
-        {
-            var entity = await _repository.Value.GetByIdAsync(id);
-            if (entity == null)
-            {
-                _logger.LogError($"error：entity Id {id} does not exist");
-                return ResultModel.NotExists;
-            }
-            entity.AuditState = state;
-            _repository.Value.Update(entity);
-
-            if (await UnitOfWork.SaveChangesAsync() > 0)
-            {
-                return ResultModel.Success(true);
-            }
-            _logger.LogError($"error：Update Save failed");
-            return ResultModel.Failed("error：Update Save failed", 500);
         }
     }
 }

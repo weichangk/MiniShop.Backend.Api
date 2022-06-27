@@ -20,17 +20,16 @@ namespace MiniShop.Backend.Api.Controllers
     {
         private readonly Lazy<IPromotionOderService> _promotionOderService;
         private readonly Lazy<ICreatePromotionOderService> _createPromotionOderService;
-        private readonly Lazy<IAuditPromotionOderService> _auditPromotionOderService;
+        private readonly Lazy<IUpdatePromotionOderService> _updatePromotionOderService;
 
         public PromotionOderController(ILogger<PromotionOderController> logger, Lazy<IMapper> mapper,
             Lazy<IPromotionOderService> promotionOderService,
             Lazy<ICreatePromotionOderService> createPromotionOderService,
-            Lazy<IAuditPromotionOderService> updatePromotionOderService,
-            Lazy<IAuditPromotionOderService> auditPromotionOderService) : base(logger, mapper)
+            Lazy<IUpdatePromotionOderService> updatePromotionOderService) : base(logger, mapper)
         {
             _promotionOderService = promotionOderService;
             _createPromotionOderService = createPromotionOderService;
-            _auditPromotionOderService = auditPromotionOderService;
+            _updatePromotionOderService = updatePromotionOderService;
         }
 
         [Description("根据促销订单 ID 获取促销订单")]
@@ -108,13 +107,13 @@ namespace MiniShop.Backend.Api.Controllers
             return await _createPromotionOderService.Value.InsertAsync(model);
         }
 
-        [Description("审核促销订单")]
-        [HttpPut("AuditAsync")]
+        [Description("Put 修改促销订单")]
+        [HttpPut("UpdateAsync")]
         [Authorize(Roles = "ShopManager, ShopAssistant")]
-        public async Task<IResultModel> AuditAsync([FromBody] PromotionOderAuditDto model)
+        public async Task<IResultModel> UpdateAsync([FromBody] PromotionOderUpdateDto model)
         {
-            _logger.LogDebug("审核促销订单");
-            return await _auditPromotionOderService.Value.UpdateAsync(model);
+            _logger.LogDebug("修改促销订单");
+            return await _updatePromotionOderService.Value.UpdateAsync(model);
         }
     }
 }

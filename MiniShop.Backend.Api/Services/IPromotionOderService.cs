@@ -20,8 +20,8 @@ namespace MiniShop.Backend.Api.Services
     {
 
     }
-    public interface IAuditPromotionOderService : IBaseService<PromotionOder, PromotionOderAuditDto, int>
+    public interface IUpdatePromotionOderService : IBaseService<PromotionOder, PromotionOderUpdateDto, int>
     {
-        Task<IResultModel> AuditPromotionOderStatusAsync(int id, EnumAuditStatus state);
+        
     }
 }
